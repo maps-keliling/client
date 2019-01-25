@@ -9,6 +9,10 @@ class Login extends Component {
         error: ""
     }
 
+    // componentDidMount() {
+    //     console.log(this.props.navigation)
+    // }
+
     handleChange = (name, value) => {
         this.setState({
             [name]: value
@@ -35,9 +39,11 @@ class Login extends Component {
             await AsyncStorage.setItem('role', role);
 
             if (role === "seller") {
-                this.props.navigation.navigate('SellerHome')
+                // this.props.navigation.navigate('SellerHome')
+                this.props.navigation.navigate('App')
             } else if (role === "buyer") {
-                this.props.navigation.navigate("BuyerHome")
+                // this.props.navigation.navigate("BuyerHome")
+                this.props.navigation.navigate('App')
             }
         })
         .catch( err => {
@@ -137,4 +143,5 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Login
+// export default Login
+export default withNavigation(Login);

@@ -1,13 +1,17 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import AppNavigator from './src/navigators/AppNavigator'
-import SwitchNavigator from './src/navigators/SwitchNavigator'
+// import AppNavigator from './src/navigators/AppNavigator'
+// import SwitchNavigator from './src/navigators/SwitchNavigator'
+// import StackContainer from './src/navigators/StackNavigator'
+// import AppContainer from './src/navigators/AppNavigator'
+import SwitchContainer from './src/navigators/SwitchNavigator';
 
 export default class App extends Component {
   render() {
     return (
-      <AppNavigator></AppNavigator>
-      // <SwitchNavigator />
+      // <AppContainer></AppContainer>
+      // <StackContainer />
+      <SwitchContainer />
     );
   }
 }

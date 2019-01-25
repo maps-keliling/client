@@ -5,6 +5,8 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import Login from '../containers/Login';
 import Register from '../containers/Register';
 import HomeHeader from '../components/CustomHeader';
+import BuyerRegister from '../containers/BuyerRegister';
+import SellerRegister from '../containers/SellerRegister'
 
 const AppNavigator = createStackNavigator(
   {
@@ -16,7 +18,12 @@ const AppNavigator = createStackNavigator(
         )
       }
     }, 
-    Register
+    SellerRegister: {
+      screen: SellerRegister
+    },
+    BuyerRegister: {
+        screen: BuyerRegister
+    }
  }, {
    initialRouteName: 'Login'
  }

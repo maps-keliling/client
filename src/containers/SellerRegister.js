@@ -30,7 +30,7 @@ class Register extends Component {
         username: "",
         handphoneNumber: "",
         password: "",
-        type: "seller"
+        role: "seller"
     }
 
     handleChange = (name, value) => {

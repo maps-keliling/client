@@ -1,6 +1,6 @@
 import React, { Component} from 'react'
-import { StyleSheet, View, Text, Button, ScrollView, Image, TextInput } from 'react-native'
-
+import { StyleSheet, View, Text, Button, ScrollView, Image, TextInput, AsyncStorage } from 'react-native'
+import axios from 'axios'
 
 class Login extends Component {
     state = {
@@ -14,9 +14,25 @@ class Login extends Component {
         })
     }
 
-    login = () => {
-        console.log('loggedIN');
-        
+    login = async () => {
+        console.log('woiii');
+        await AsyncStorage.setItem('user', 'dummyUser');
+        this.props.navigation.navigate('BuyerHome')
+        // axios({
+        //     url: "",
+        //     method: "POST"
+        // })
+        // .then( response => {
+        //     await AsyncStorage.setItem('user', 'dummyUser');
+        //     await AsyncStorage.setItem('accessToken', 'dummyToken');
+        //     await AsyncStorage.setItem('role', 'dummyRole');
+        //     this.props.navigation.navigate('BuyerHome')
+        //     const userToken = await AsyncStorage.getItem('userToken');
+        //     console.log('loggedIN', userToken);
+        // })
+        // .catch( err => {
+        //     console.log("error: ", err.response);
+        // })
     }
 
 

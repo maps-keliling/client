@@ -24,7 +24,7 @@ const DrawerNavigator = createDrawerNavigator(
                     <DrawerItems {...props} />
                 </View>
                 <View style={{justifyContent: 'flex-end', backgroundColor: 'red', alignItems: 'center', padding: 10}}>
-                    <TouchableHighlight onPress={ async() => (await AsyncStorage.clear('token'), props.navigation.navigate('Auth'))}>
+                    <TouchableHighlight onPress={ async() => (await AsyncStorage.clear(), props.navigation.navigate('Auth'))}>
                         <Text style={{color: 'white', fontWeight: 'bold', fontSize: 15}}>Log Out!</Text>
                     </TouchableHighlight>
                 </View>

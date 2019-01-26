@@ -1,6 +1,7 @@
 import React, { Component} from 'react'
 import { StyleSheet, View, Text, Button, ScrollView, Image, TextInput, AsyncStorage } from 'react-native'
 import axios from 'axios'
+// import firebase from 'react-native-firebase'
 
 class Login extends Component {
     state = {
@@ -10,8 +11,13 @@ class Login extends Component {
     }
 
     // componentDidMount() {
-    //     console.log(this.props.navigation)
+    //     // console.log(this.props.navigation)
+    //     console.log('ini did mount')
+    //     firebase.database().ref('Test').on('value', (snapshot) => {
+    //         console.log(snapshot.val())
+    //     })
     // }
+    
 
     handleChange = (name, value) => {
         this.setState({
@@ -68,6 +74,9 @@ class Login extends Component {
                         source={require("../assets/login.png")}
                     />
                 </View>
+                <Text>
+                    ini harusnya firebase 
+                </Text>
                 <Text style={styles.textBody}>Silahkan Masuk</Text>
                 <Text style={styles.info}>{message}</Text>
                 <TextInput

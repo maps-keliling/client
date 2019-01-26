@@ -1,26 +1,20 @@
 import { createSwitchNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation'
 import Login from '../containers/Login'
-import AuthLoadingScreen from '../containers/Loading'
-import BuyerHome from '../containers/BuyerHome'
-import SellerHome from '../containers/SellerHome'
+import AuthLoadingScreen from '../components/Loading';
+import BuyerRegister from '../containers/BuyerRegister';
+import SellerRegister from '../containers/SellerRegister';
+import Register from '../containers/Register';
 
+import AppDrawerNavigator from './DrawerNavigator'
 
-const DrawerNavigator = createDrawerNavigator({
-    BuyerHome,
-    SellerHome
-})
+const AppSwitchNavigator = createSwitchNavigator({
+    AuthLoading: AuthLoadingScreen,
+    // App: AppStack,
+    Auth: Login,
+    Register: Register,
 
-const DrawerContainer = createAppContainer(DrawerNavigator)
+    App: { screen: AppDrawerNavigator }
+});
 
-const SwitchStack = createSwitchNavigator(
-    {
-        AuthLoading: AuthLoadingScreen,
-        App: DrawerContainer,
-        Auth: Login,
-    },
-    {
-        initialRouteName: 'Auth'
-    }
-)
-
-export default createAppContainer(SwitchStack);
+const AppContainer = createAppContainer(AppSwitchNavigator);
+export default AppContainer;

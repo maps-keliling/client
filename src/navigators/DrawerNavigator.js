@@ -2,7 +2,7 @@ import { createDrawerNavigator, createAppContainer, DrawerItems, withNavigation 
 import MapScreen from '../containers/Map';
 import ChatScreen from '../containers/ChatScreen';
 import React from 'react'
-import { View, Text, Image, TouchableHighlight } from 'react-native';
+import { View, Text, Image, TouchableHighlight, AsyncStorage } from 'react-native';
 
 const DrawerNavigator = createDrawerNavigator(
     {      
@@ -24,7 +24,7 @@ const DrawerNavigator = createDrawerNavigator(
                     <DrawerItems {...props} />
                 </View>
                 <View style={{justifyContent: 'flex-end', backgroundColor: 'red', alignItems: 'center', padding: 10}}>
-                    <TouchableHighlight onPress={() => props.navigation.navigate('Auth')}>
+                    <TouchableHighlight onPress={ async() => (await AsyncStorage.clear('token'), props.navigation.navigate('Auth'))}>
                         <Text style={{color: 'white', fontWeight: 'bold', fontSize: 15}}>Log Out!</Text>
                     </TouchableHighlight>
                 </View>

@@ -7,7 +7,7 @@ export default class App extends Component {
     return (
       // <AppContainer />
       // <StackContainer />
-      <SwitchContainer />
+      <SwitchNavigator />
     );
   }
 }

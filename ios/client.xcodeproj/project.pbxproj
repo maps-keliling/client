@@ -37,7 +37,11 @@
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
+<<<<<<< HEAD
+		3DD1FF39C017438BA02B5497 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 857D14AD9EDF4EDE8D36FE53 /* libRNGestureHandler.a */; };
+=======
 		566B7A35E9044405814AB6C4 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9518DB947BCF4F78BE65BF53 /* libRNGestureHandler.a */; };
+<<<<<<< HEAD
 		5F32FC33BCD64012AAF8ED4E /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 62E3BD2FF0DF406C8F4F6965 /* AntDesign.ttf */; };
 		2CD92916C203443E8C45CB9E /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C54D15DB93724F26ABAC8B20 /* Entypo.ttf */; };
 		CED3F44038374F929E0E2448 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DEE17C0B9B5742E6BD8BC9E8 /* EvilIcons.ttf */; };
@@ -56,6 +60,9 @@
 		C1EA6BC98B454D218ADC2267 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0425BDD1E15B4979831AC404 /* rubicon-icon-font.ttf */; };
 		494600C24AFF41BBB4A35C4D /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AD152ABC978149ADA6164DEE /* SimpleLineIcons.ttf */; };
 		C4950973682C4EE5A714527D /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6BEF3610AD5947B6A372333E /* Zocial.ttf */; };
+=======
+>>>>>>> bf2b6e1403b9cfb5e2b95af1cbe8ef3cf41d2ac6
+>>>>>>> 6b12854c29bd2fc5c954c849dbc998b5724e52aa
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -361,8 +368,13 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
+<<<<<<< HEAD
+		5268A4ACF78B4E00BE05CA97 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; name = "RNGestureHandler.xcodeproj"; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		857D14AD9EDF4EDE8D36FE53 /* libRNGestureHandler.a */ = {isa = PBXFileReference; name = "libRNGestureHandler.a"; path = "libRNGestureHandler.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+=======
 		9CDD70F6494C419EA00D7072 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; name = "RNGestureHandler.xcodeproj"; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		9518DB947BCF4F78BE65BF53 /* libRNGestureHandler.a */ = {isa = PBXFileReference; name = "libRNGestureHandler.a"; path = "libRNGestureHandler.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+<<<<<<< HEAD
 		62E3BD2FF0DF406C8F4F6965 /* AntDesign.ttf */ = {isa = PBXFileReference; name = "AntDesign.ttf"; path = "../node_modules/native-base/Fonts/AntDesign.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		C54D15DB93724F26ABAC8B20 /* Entypo.ttf */ = {isa = PBXFileReference; name = "Entypo.ttf"; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		DEE17C0B9B5742E6BD8BC9E8 /* EvilIcons.ttf */ = {isa = PBXFileReference; name = "EvilIcons.ttf"; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
@@ -381,6 +393,9 @@
 		0425BDD1E15B4979831AC404 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		AD152ABC978149ADA6164DEE /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		6BEF3610AD5947B6A372333E /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+=======
+>>>>>>> bf2b6e1403b9cfb5e2b95af1cbe8ef3cf41d2ac6
+>>>>>>> 6b12854c29bd2fc5c954c849dbc998b5724e52aa
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -408,7 +423,11 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+<<<<<<< HEAD
+				3DD1FF39C017438BA02B5497 /* libRNGestureHandler.a in Frameworks */,
+=======
 				566B7A35E9044405814AB6C4 /* libRNGestureHandler.a in Frameworks */,
+>>>>>>> bf2b6e1403b9cfb5e2b95af1cbe8ef3cf41d2ac6
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -595,7 +614,11 @@
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
+<<<<<<< HEAD
+				5268A4ACF78B4E00BE05CA97 /* RNGestureHandler.xcodeproj */,
+=======
 				9CDD70F6494C419EA00D7072 /* RNGestureHandler.xcodeproj */,
+>>>>>>> bf2b6e1403b9cfb5e2b95af1cbe8ef3cf41d2ac6
 			);
 			name = Libraries;
 			sourceTree = "<group>";

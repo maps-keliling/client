@@ -143,5 +143,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Login
-// export default withNavigation(Login);
+export default Login;

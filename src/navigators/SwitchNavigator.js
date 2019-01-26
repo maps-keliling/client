@@ -12,17 +12,28 @@ const DrawerNavigator = createDrawerNavigator({
 
 const DrawerContainer = createAppContainer(DrawerNavigator)
 
-const SwitchStack = createSwitchNavigator(
-    {
-        AuthLoading: AuthLoadingScreen,
-        App: DrawerContainer,
-        Auth: Login,
-    },
-    {
-        initialRouteName: 'Auth'
-    }
-)
 // import AppStack from './AppNavigator';
 // import DrawerNativeBase from './DrawerNativeBase'
 
-export default createAppContainer(SwitchStack);
+import AppDrawerNavigator from './DrawerNavigator'
+
+const AppSwitchNavigator = createSwitchNavigator({
+    AuthLoading: AuthLoadingScreen,
+    // App: AppStack,
+    Auth: AuthStack,
+    App: { screen: AppDrawerNavigator }
+});
+
+const AppContainer = createAppContainer(AppSwitchNavigator);
+export default AppContainer;
+
+// export default createAppContainer(createSwitchNavigator(
+//   {
+//     AuthLoading: AuthLoadingScreen,
+//     App: AppStack,
+//     Auth: AuthStack,
+//   },
+//   {
+//     initialRouteName: 'Auth',
+//   }
+// ));

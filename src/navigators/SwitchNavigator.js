@@ -22,5 +22,7 @@ const SwitchStack = createSwitchNavigator(
         initialRouteName: 'Auth'
     }
 )
+// import AppStack from './AppNavigator';
+// import DrawerNativeBase from './DrawerNativeBase'
 
 export default createAppContainer(SwitchStack);

@@ -37,7 +37,7 @@ class Register extends Component {
             this.setState({
                 name: "", username: "", phone: "", address: "", password: "", role: "", errors: []
             }, () => {
-                this.props.navigation.navigate('Login', {
+                this.props.navigation.navigate('Auth', {
                     message: "Anda sudah terdaftar. Silahkan masuk untuk melanjutkan"
                 }) 
             }) 
@@ -132,7 +132,7 @@ class Register extends Component {
                         onPress={this.register}
                     ></Button>
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('Login')}
+                        onPress={() => this.props.navigation.navigate('Auth')}
                         ><Text
                             style={styles.textBody}
                         >Sudah Daftar? Silahkan Login</Text>

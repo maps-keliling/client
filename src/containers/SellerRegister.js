@@ -45,7 +45,7 @@ class Register extends Component {
                 <View style={styles.imageContainer}>
                     <Image
                         style={styles.image}
-                        source={require("../assets/sellerRegister.png")}
+                        source={require("../assets/register.png")}
                     />
                 </View>
                 <Text style={styles.textBody}>Hai, Calon Penjual!</Text>

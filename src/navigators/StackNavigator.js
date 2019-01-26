@@ -6,7 +6,7 @@ import MapScreen from '../containers/Map';
 import ChatScreen from '../containers/ChatScreen'
 import React from 'react';
 import {Platform, StyleSheet, Text, View, Button} from 'react-native';
-
+import Home from '../containers/Home/index';
 // const StackNavigator = createStackNavigator(
 //     {
 //         Login: {
@@ -26,8 +26,8 @@ import {Platform, StyleSheet, Text, View, Button} from 'react-native';
 
 const DashboardStackNavigator = createStackNavigator(
     {
-        DashboardTabNavigator: MapScreen,
-        MapScreen,
+        DashboardTabNavigator: Home,
+        MapScreen : Home,
         ChatScreen,
     //   SellerHome: SellerHome,
     //   BuyerHome: BuyerHome,

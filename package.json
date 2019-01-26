@@ -7,19 +7,13 @@
     "test": "jest"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "axios": "^0.18.0",
-    "react": "16.6.3",
-    "react-native": "0.57.8",
-    "react-native-firebase": "^5.2.1",
-=======
     "@mapbox/polyline": "^1.0.0",
     "axios": "^0.18.0",
     "react": "16.6.3",
     "react-native": "0.57.8",
     "react-native-android-location-enabler": "^1.0.8",
     "react-native-android-location-services-dialog-box": "^2.7.0",
->>>>>>> maps
+    "react-native-firebase": "^5.2.1",
     "react-native-gesture-handler": "^1.0.14",
     "react-native-maps": "^0.23.0",
     "react-native-vector-icons": "^6.2.0",

@@ -1,17 +1,18 @@
 package com.client;
 
 import android.app.Application;
-
+import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 import com.facebook.react.ReactApplication;
-import com.showlocationservicesdialogbox.LocationServicesDialogBoxPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import io.invertase.firebase.RNFirebasePackage;
+import com.showlocationservicesdialogbox.LocationServicesDialogBoxPackage;
+import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,15 +29,13 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-<<<<<<< HEAD
-            new RNGestureHandlerPackage(),
             new RNFirebasePackage(),
-            new RNFirebaseDatabasePackage()
-=======
-            new LocationServicesDialogBoxPackage(),
+            new VectorIconsPackage(),
             new MapsPackage(),
-            new RNGestureHandlerPackage()
->>>>>>> maps
+            new RNGestureHandlerPackage(),
+            new LocationServicesDialogBoxPackage(),
+            new RNAndroidLocationEnablerPackage(),
+            new RNFirebaseDatabasePackage()
       );
     }
 

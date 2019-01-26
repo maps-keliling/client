@@ -3,10 +3,11 @@ import MapScreen from '../containers/Map';
 import ChatScreen from '../containers/ChatScreen';
 import React from 'react'
 import { View, Text, Image, TouchableHighlight, AsyncStorage } from 'react-native';
+import Home from '../containers/Home'
 
 const DrawerNavigator = createDrawerNavigator(
     {      
-        MapScreen,
+        MapScreen: Home,
         ChatScreen,
     },
     {

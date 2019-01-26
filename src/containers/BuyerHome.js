@@ -1,27 +1,27 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, AsyncStorage } from 'react-native'
+import { StyleSheet, Text, View, AsyncStorage, Button } from 'react-native'
 
 class BuyerHome extends Component {
+    logout = async () => {
+        await AsyncStorage.removeItem('token')
+        this.props.navigation.navigate('Auth')
+    }
+
     componentDidMount() {
         this.checkLogin()
     }
 
-    state = {
-        currentUser: ""
-    }
-
     checkLogin = async () => {
-        const currentUser = await AsyncStorage.getItem('user')
-        this.setState({
-            currentUser: currentUser
-        })
+        let token = await AsyncStorage.getItem('token')
+        let role = await AsyncStorage.getItem('role')
+        console.log(token, role);
     }
 
     render() {
         return (
             <View>
                 <Text>hello. ini buyer home</Text>
-                <Text>Hello {this.state.currentUser}</Text>
+                <Button title='Log Out' onPress={this.logout} />
             </View>
         )
     }

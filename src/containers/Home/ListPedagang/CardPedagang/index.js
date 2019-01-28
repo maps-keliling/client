@@ -7,7 +7,7 @@ class Pedagang extends Component {
             <TouchableOpacity style={styles.container} >
                 <View style={styles.ImageWrapper}>
                     <Image 
-                        source={{uri : 'http://simpleicon.com/wp-content/uploads/camera.png'}}
+                        source={require("../../../../assets/street-vendor.png")}
                         style={styles.photo}/>
                 </View>
                 <View style={styles.DataPedagang}>
@@ -28,13 +28,15 @@ class Pedagang extends Component {
 
 const styles = StyleSheet.create({
     container : {
-        padding : 15,
+        paddingHorizontal : 20,
+        paddingVertical : 5,
         flexDirection :'row',
         width : '100%',
         height : 60,
         marginBottom : 5,
         borderWidth : 1,
-        borderRadius : 10 
+        borderColor: 'lightgrey',
+        borderRadius : 25
     },
     ImageWrapper : {
         width : 50,
@@ -47,15 +49,15 @@ const styles = StyleSheet.create({
     },
     photo : {
         flex : 1,
-        width : 40,
-        height : 40
+        width : 80,
+        height : 80
     },
     DataPedagang : {
         paddingLeft : 30,
         width : '70%',
         height : '100%',
         alignItems : 'flex-start',
-        justifyContent : 'flex-start'
+        justifyContent : 'center'
     }
 })
 

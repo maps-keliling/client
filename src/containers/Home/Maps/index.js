@@ -18,6 +18,8 @@ import StyleMaps from '../StyleMap.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { DrawerActions, withNavigation } from 'react-navigation';
 import BurgerMenu from '../../../components/burgerMenu'
+import { connect } from 'react-redux';
+
 
 class App extends Component{
   state = {
@@ -28,6 +30,7 @@ class App extends Component{
     coords : [],
     map : React.createRef()
   }
+
   startNavigation = () => {
     var url = "https://www.google.com/maps/dir/?api=1&origin=75+9th+Ave+New+York,+NY&travelmode=driving&dir_action=navigate&destination=MetLife+Stadium+1+MetLife+Stadium+Dr+East+Rutherford,+NJ+07073";
     Linking.canOpenURL(url).then(supported => {
@@ -38,6 +41,7 @@ class App extends Component{
       }
   }).catch(err => console.error('An error occurred', err)); 
   }
+
   getDirections = async ( destination ) => {
     // let { data } = await axios.get(`https://maps.googleapis.com/maps/api/directions/json?
     //            origin=${this.state}
@@ -126,6 +130,7 @@ class App extends Component{
   }
 
   componentDidMount(){
+    console.log('ini adalah props :', this.props)
     this.cekMapsEnaled()
   }
 
@@ -225,6 +230,15 @@ const styles = StyleSheet.create({
     height : 100,
     borderWidth : 1
   }
- });
+});
+
+
+const mapStatetoProps = state =>{
+  return {
+    allUsers : state.home.allUsers
+  }
+}
+
+export default connect(mapStatetoProps, null)(App)
 
  export default withNavigation(App)

@@ -82,11 +82,13 @@ class Login extends Component {
                 <TextInput
                     style={styles.inputNumber}
                     placeholder="Username"
+                    autoCapitalize="none"
                     ref={input => { this.inputUsername = input }}
                     onChangeText={(text) => this.handleChange('username', text)}
                     underlineColorAndroid="#F0E9E0"
                 ></TextInput>
                 <TextInput
+                    autoCapitalize="none"
                     style={styles.inputNumber}
                     secureTextEntry={true} 
                     placeholder="Kata sandi"

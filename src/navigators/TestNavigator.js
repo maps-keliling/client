@@ -1,8 +1,11 @@
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
 import Login from '../containers/Login'
-import BuyerRegister from '../containers/BuyerRegister'
-import SellerRegister from '../containers/SellerRegister'
+import Register from '../containers/Register'
 import Home from '../containers/Home/index';
+import ChatList from '../containers/ChatList'
+import ChatRoom from '../containers/ChatRoom'
+import SellerDetail from '../containers/SellerDetail'
+
 const AppNavigator = createBottomTabNavigator({
     Login: {
         screen: Login
@@ -10,14 +13,20 @@ const AppNavigator = createBottomTabNavigator({
     Register: {
         screen: Register
     },
-    BuyerRegister: {
-        screen: BuyerRegister
-    },
     Home : {
         screen : Home
+    },
+    ChatList : {
+        screen : ChatList
+    },
+    ChatRoom : {
+        screen : ChatRoom
+    },
+    SellerDetail: {
+        screen: SellerDetail
     }
 }, {
-    initialRouteName: 'Login'
+    initialRouteName: 'Home'
 })
 
 const AppContainer = createAppContainer(AppNavigator)

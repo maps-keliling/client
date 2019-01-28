@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 import MapsView from './Maps/index';
 import ListPedagang from './ListPedagang/index';
+import { DrawerActions } from 'react-navigation';
+
 class Home extends Component {
     render(){
         return (
             <View style={styles.container}>
                 <View style={styles.maps}>
-                    <MapsView/>
+                    <MapsView {...this.props}/>
                 </View>
                 <View style={styles.listPedagang}>
                    <ListPedagang/>

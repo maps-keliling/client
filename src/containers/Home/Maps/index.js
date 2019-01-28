@@ -7,7 +7,7 @@
  */
 //081314782109
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
+import {Platform, StyleSheet, Text, View, TextInput, TouchableOpacity, Image} from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker,Polyline } from 'react-native-maps';
 import { PermissionsAndroid, BackHandler, DeviceEventEmitter, Linking } from 'react-native';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
@@ -16,8 +16,10 @@ const APIKEY_GOOGLE_DIRECTION = 'AIzaSyAwiEbbtLePgCOrTpqCeTYQ8qmt-pxX1bE';
 import polyline from '@mapbox/polyline';
 import StyleMaps from '../StyleMap.json';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { DrawerActions, withNavigation } from 'react-navigation';
+import BurgerMenu from '../../../components/burgerMenu'
 
-export default class App extends Component{
+class App extends Component{
   state = {
     latitude: -6.265299,
     longitude: 106.782836,
@@ -130,15 +132,20 @@ export default class App extends Component{
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.searchBar}>
-          <View>
-            <TextInput placeholder="cari makanan favorite anda.."/>
+        <View style={styles.topMenu}>
+          <BurgerMenu {...this.props}/>
+          <View style={styles.searchBar}>
+            <View>
+              <TextInput placeholder="cari makanan favorite anda.."/>
+            </View>
+            <TouchableOpacity
+              style={styles.searchButton}
+            >
+              <Icon 
+                name="search"
+                size={25}/>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity>
-            <Icon 
-              name="search"
-              size={20}/>
-          </TouchableOpacity>
         </View>
         <MapView 
           ref={map => {this.map = map}}
@@ -180,19 +187,38 @@ const styles = StyleSheet.create({
     width : '100%', 
     height : '100%',
   },
-  searchBar : {
+  topMenu : {
     position : 'absolute',
-    zIndex:100,
+    zIndex: 5,
     height : 50,
-    width:'80%',
+    width:'90%',
     top : 20,
     flexDirection : 'row',
     alignItems : 'center',
     justifyContent : 'space-around',
-    padding : 5,
-    borderWidth : 1,
-    borderRadius : 6,
-    backgroundColor : '#e1391b'
+    padding : 0,
+  },
+  searchButton: {
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'flex-end'
+  },
+  menu: {
+    marginHorizontal: 10,
+    borderRadius: 50,
+    backgroundColor: 'white'
+  },
+  menuIcon: {
+    width: 50,
+    height: 50
+  },
+  searchBar: {
+    paddingHorizontal: 20,
+    marginHorizontal: 5,
+    flex: 1,
+    flexDirection : 'row',
+    borderRadius : 25,
+    backgroundColor : 'white',
   },
   inputLocation : {
     width : '100%',
@@ -201,3 +227,4 @@ const styles = StyleSheet.create({
   }
  });
 
+ export default withNavigation(App)

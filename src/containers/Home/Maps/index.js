@@ -1,26 +1,24 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-//081314782109
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker,Polyline } from 'react-native-maps';
-import { PermissionsAndroid, BackHandler, DeviceEventEmitter, Linking } from 'react-native';
+import MapView, { PROVIDER_GOOGLE, Marker,Polyline,Callout  } from 'react-native-maps';
+import { PermissionsAndroid,Image, BackHandler, DeviceEventEmitter, Linking } from 'react-native';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 import axios from 'axios';
 const APIKEY_GOOGLE_DIRECTION = 'AIzaSyAwiEbbtLePgCOrTpqCeTYQ8qmt-pxX1bE';
 import polyline from '@mapbox/polyline';
 import StyleMaps from '../StyleMap.json';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { DrawerActions, withNavigation } from 'react-navigation';
-import BurgerMenu from '../../../components/burgerMenu'
+import SearchBar from './SeacrhBar/index';
 import { connect } from 'react-redux';
+import haversine from 'haversine';
+import CustomMarker from './CustomMarker/index';
 
 
+
+import BurgerMenu from '../../../components/burgerMenu';
+import Icon from 'react-native-vector-icons/FontAwesome';
+//actions 
+import { setCurrentPositionUser } from '../../../actions/home';
 class App extends Component{
   state = {
     latitude: -6.265299,
@@ -30,7 +28,6 @@ class App extends Component{
     coords : [],
     map : React.createRef()
   }
-
   startNavigation = () => {
     var url = "https://www.google.com/maps/dir/?api=1&origin=75+9th+Ave+New+York,+NY&travelmode=driving&dir_action=navigate&destination=MetLife+Stadium+1+MetLife+Stadium+Dr+East+Rutherford,+NJ+07073";
     Linking.canOpenURL(url).then(supported => {
@@ -41,7 +38,6 @@ class App extends Component{
       }
   }).catch(err => console.error('An error occurred', err)); 
   }
-
   getDirections = async ( destination ) => {
     // let { data } = await axios.get(`https://maps.googleapis.com/maps/api/directions/json?
     //            origin=${this.state}
@@ -88,7 +84,10 @@ class App extends Component{
         latitude, longitude
       }, () => {
           this.handleCenter()
-          this.getDirections()
+          this.props.setPosition({
+            latitude : this.state.latitude,
+            longitude : this.state.longitude
+          })
       })
     }, (error) => {
       console.log('ini adaalah error :', error)
@@ -119,6 +118,26 @@ class App extends Component{
     }
   }
 
+  calculateDistance = (data) => {
+    const target = {
+      latitude : data.lat,
+      longitude : data.long
+    }
+    const currentPosition =  {
+      latitude : this.state.latitude, 
+      longitude : this.state.longitude
+    }
+
+    let distance = haversine(currentPosition, target, {unit : 'meter'}).toFixed(2)
+    if( distance >= 1000){
+      let km = Math.floor(distance / 1000)
+      let sisa = distance % 1000
+      return String((km+','+String(sisa).substring(0,2))+ ' Km')
+    }else{
+      return String(distance + ' Meter')
+    }
+  }
+
   handleCenter = () => {
     const { latitude, longitude, latitudeDelta, longitudeDelta } = this.state;
     this.map.animateToRegion({
@@ -130,22 +149,28 @@ class App extends Component{
   }
 
   componentDidMount(){
-    console.log('ini adalah props :', this.props)
     this.cekMapsEnaled()
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.searchBar}>
-          <View>
-            <TextInput placeholder="cari makanan favorite anda.."/>
-          </View>
-          <TouchableOpacity>
-            <Icon 
-              name="search"
-              size={20}/>
-          </TouchableOpacity>
+         <View style={styles.topMenu}>
+            <BurgerMenu {...this.props}/>
+            <View style={styles.searchBar}>
+              <View>
+                <TextInput 
+                    placeholder="cari makanan favorite anda.."
+                    value={this.state.keyword}
+                    onChangeText={(text) => this.setState({keyword : text})} />
+              </View>
+              <TouchableOpacity
+                style={styles.searchButton}>
+                <Icon 
+                  name="search"
+                  size={25}/>
+              </TouchableOpacity>
+            </View>
         </View>
         <MapView 
           ref={map => {this.map = map}}
@@ -158,28 +183,63 @@ class App extends Component{
             latitudeDelta: this.state.latitudeDelta,
             longitudeDelta: this.state.longitudeDelta,
           }}
+          showsUserLocation={true}
+        
         >
-          <Marker
-            coordinate={{...this.state}}
-            title={'Curent Position'}
-            description={'Ini adalah current position'}
-            />
+          {this.props.allUsers.length !== 0 ? this.props.allUsers.map((user, index) => {
+            return (
+            <Marker 
+              key={index} 
+              coordinate={{latitude : user.coordinate.lat, longitude:user.coordinate.long}} 
+              title={user.brand} 
+              description={this.calculateDistance(user.coordinate)}
+              onCalloutPress={()=> this.props.navigation.navigate('SellerDetail', {
+                id : user.id
+              })}>
+                <CustomMarker {...user}/>
+            </Marker>
+           )
+          }) : null}
           <Polyline
             coordinates={this.state.coords}
             strokeWidth={2}
             strokeColor="red"/>
         </MapView>
-    </View>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  topMenu : {
+    position : 'absolute',
+    zIndex: 5,
+    height : 50,
+    width:'90%',
+    top : 20,
+    flexDirection : 'row',
+    alignItems : 'center',
+    justifyContent : 'space-around',
+    padding : 0,
+},
+searchButton: {
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'flex-end'
+},
+searchBar: {
+    paddingHorizontal: 20,
+    marginHorizontal: 5,
+    flex: 1,
+    flexDirection : 'row',
+    borderRadius : 25,
+    backgroundColor : 'white',
+},
   container: {
     height: '100%',
     width: '100%',
     justifyContent: 'flex-end',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   map: {
     ...StyleSheet.absoluteFill,
@@ -187,34 +247,32 @@ const styles = StyleSheet.create({
     width : '100%', 
     height : '100%',
   },
-  searchBar : {
-    position : 'absolute',
-    zIndex:100,
-    height : 50,
-    width:'80%',
-    top : 20,
-    flexDirection : 'row',
-    alignItems : 'center',
-    justifyContent : 'space-around',
-    padding : 5,
-    borderWidth : 1,
-    borderRadius : 6,
-    backgroundColor : '#e1391b'
+  menu: {
+    marginHorizontal: 10,
+    borderRadius: 50,
+    backgroundColor: 'white'
+  },
+  menuIcon: {
+    width: 50,
+    height: 50
   },
   inputLocation : {
     width : '100%',
     height : 100,
     borderWidth : 1
   }
-});
+ });
 
+ const mapStatetoProps = state => {
+   return {
+     allUsers : state.home.allUsers
+   }
+ }
 
-const mapStatetoProps = state =>{
-  return {
-    allUsers : state.home.allUsers
-  }
-}
+ const mapDispatchtoProps = dispatch => {
+   return {
+     setPosition : (data) => dispatch(setCurrentPositionUser(data))
+   }
+ }
 
-
-export default connect(mapStatetoProps, null)(App)
-
+ export default connect(mapStatetoProps, mapDispatchtoProps)(withNavigation(App))

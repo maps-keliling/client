@@ -3,8 +3,17 @@ import { View, Text, StyleSheet, Button } from 'react-native';
 import MapsView from './Maps/index';
 import ListPedagang from './ListPedagang/index';
 import { DrawerActions } from 'react-navigation';
+import { connect } from 'react-redux';
+import firebase from 'react-native-firebase';
+//actions 
+import { ReadData } from '../../actions/home';
 
 class Home extends Component {
+
+    componentDidMount(){
+        this.props.readDataSeller()
+    }
+
     render(){
         return (
             <View style={styles.container}>
@@ -12,7 +21,7 @@ class Home extends Component {
                     <MapsView {...this.props}/>
                 </View>
                 <View style={styles.listPedagang}>
-                   <ListPedagang/>
+                   <ListPedagang {...this.props}/>
                 </View>
             </View>
         )
@@ -27,7 +36,6 @@ const styles = StyleSheet.create({
     },
     maps : {
         flex : 1,
-        backgroundColor : 'blue'
     },
     listPedagang : {
         height : 200,
@@ -37,4 +45,10 @@ const styles = StyleSheet.create({
 
     }
 })
-export default Home;
+
+const mapDispatchtoProps = dispatch => {
+    return {
+        readDataSeller : () => dispatch(ReadData())
+    }
+}
+export default connect(null, mapDispatchtoProps)(Home);

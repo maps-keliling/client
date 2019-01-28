@@ -1,40 +1,63 @@
 import React, { Component } from 'react'
-import { View, Text, Image, FlatList, ScrollView } from 'react-native'
-
+import { View, Text, Image, FlatList, ScrollView, TouchableOpacity } from 'react-native'
+import axios from 'axios';
+import { AsyncStorage } from 'react-native';
 
 class SellerDetail extends Component {
     state = {
         name: "",
         brand: "",
         itemList: [{
-            name: "Baso Urat",
-            price: 25000
-        }, {
-            name: "Baso Keju",
-            price: 30000
-        }, {
-            name: "Baso Keju",
-            price: 30000
-        }, {
-            name: "Baso Keju",
-            price: 30000
-        }, {
-            name: "Baso Keju",
-            price: 30000
+            name: "",
+            price: ""
         }]
     }
-
+    getToken = async () => {
+        try {
+            const value = await AsyncStorage.getItem('token');
+            if (value !== null) {
+                return value
+            }
+          } catch (error) {
+            console.log(error)
+          }
+    }
+    componentDidMount = async () => {
+        let id = this.props.navigation.getParam('id')
+        let token = await this.getToken()
+        axios.get('http://35.243.157.0/users/'+id, {
+            headers : {
+                auth : token
+            }
+        })
+        .then(({ data }) => {
+            console.log(  data )
+           this.setState({
+               name : data.name,
+               brand : data.shopId.brand,
+               itemList : data.shopId.itemList
+           }, ()=>{
+               console.log(this.state)
+           })
+        })
+        .catch(error => {
+            console.log(error)
+        })
+      
+    }
 
     render() {
         return (
-            <ScrollView>
-                <View style={styles.container}>
+            <View style={styles.container}>
+                <View>
+                    <ScrollView>
+                <View style={styles.profileContainer}>
                     <Image
                         source={require("../assets/profile.png")}
                         style={styles.imageProfile}
                     ></Image>
-                    <Text style={styles.name}>Budi</Text>
-                    <Text style={styles.brand}>Sate Ayam Hacktiv8</Text>
+                    <Text style={styles.name}>{this.state.name}</Text>
+                    <Text style={styles.brand}>{this.state.brand}</Text>
                 </View>
                 <FlatList
                     style={styles.flatList}
@@ -51,6 +74,28 @@ class SellerDetail extends Component {
                     )}
                 />
             </ScrollView>
+                </View>
+                <View style={styles.bottomMenu}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate("ChatRoom")}>
+                        <Image
+                            source={require("../assets/chat.png")}
+                            style={styles.menuIcon}
+                        ></Image>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Image
+                            source={require("../assets/marker.png")}
+                            style={styles.menuIcon}
+                        ></Image>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.testCall()}>
+                    <Image
+                        source={require("../assets/call.png")}
+                        style={styles.menuIcon}
+                    ></Image>
+                    </TouchableOpacity>
+                </View>
+            </View>
         )
     }
 }
@@ -58,6 +103,27 @@ class SellerDetail extends Component {
 
 const styles = {
     container: {
+        flex: 1,
+        position: 'relative'
+    },
+    bottomMenu: {
+        height: 60,
+        borderWidth: 1,
+        backgroundColor: 'white',
+        borderColor: 'lightgrey',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        width: "100%",
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center'
+    },
+    menuIcon: {
+        width: 70,
+        height: 70
+    },
+    profileContainer: {
         alignItems: 'center', 
         backgroundColor: "white",
         marginVertical: 10,
@@ -82,13 +148,13 @@ const styles = {
     },
     itemName: {
         flex: 3,
-        fontSize: 16,
+        fontSize: 18,
         marginHorizontal: 10,
     },
     itemPrice: {
         flex: 1,
         marginHorizontal: 10,
-        fontSize: 16,
+        fontSize: 18,
     },
     name: {
         fontSize: 40,

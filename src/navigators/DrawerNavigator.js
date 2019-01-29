@@ -1,6 +1,7 @@
 import { createDrawerNavigator, createAppContainer, DrawerItems, withNavigation } from 'react-navigation';
 import MapScreen from '../containers/Map';
 import ChatScreen from '../containers/ChatScreen';
+import ChatList from '../containers/ChatList'
 import React from 'react'
 import { View, Text, Image, TouchableHighlight, AsyncStorage } from 'react-native';
 import Home from '../containers/Home'
@@ -9,7 +10,8 @@ const DrawerNavigator = createDrawerNavigator(
     {      
         MapScreen: Home,
         ChatScreen,
-        SellerDetail : SellerDetail
+        SellerDetail : SellerDetail,
+        ChatList,
     },
     {
         backBehavior: "none",

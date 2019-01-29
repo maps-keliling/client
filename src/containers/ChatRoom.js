@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     },
     chatContainer: {
         flexDirection: 'row',
-        backgroundColor: 'black',
+        backgroundColor: '#283D85',
         paddingVertical: 5,
         height: 60
     },

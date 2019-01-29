@@ -5,6 +5,7 @@ import Home from '../containers/Home/index';
 import ChatList from '../containers/ChatList'
 import ChatRoom from '../containers/ChatRoom'
 import SellerDetail from '../containers/SellerDetail'
+import ShopDetail from '../containers/ShopDetail'
 
 const AppNavigator = createBottomTabNavigator({
     Login: {
@@ -24,9 +25,12 @@ const AppNavigator = createBottomTabNavigator({
     },
     SellerDetail: {
         screen: SellerDetail
+    },
+    ShopDetail: {
+        screen: ShopDetail
     }
 }, {
-    initialRouteName: 'Home'
+    initialRouteName: 'ShopDetail'
 })
 
 const AppContainer = createAppContainer(AppNavigator)

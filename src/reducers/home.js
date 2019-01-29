@@ -1,4 +1,5 @@
 const initialState = {
+    token : '',
     allUsers : [],
     keyword : '',
     userPosition : {
@@ -11,7 +12,8 @@ const initialState = {
 import { SET_CURRENT_POSITION_USER,
          READ_COORDINATE_SELLER,
          SEARCH,
-         LOADING_READ_USER } from '../actions_types/index';
+         LOADING_READ_USER,
+         SET_TOKEN } from '../actions_types/index';
 export default (state=initialState, action) => {
     switch(action.type) {
         case LOADING_READ_USER :
@@ -36,6 +38,11 @@ export default (state=initialState, action) => {
             return {
                 ...state,
                 keyword : action.value
+            }
+        case SET_TOKEN :
+            return {
+                ...state,
+                token : action.value
             }
         default : 
             return {

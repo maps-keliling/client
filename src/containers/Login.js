@@ -2,7 +2,10 @@ import React, { Component} from 'react'
 import { StyleSheet, View, Text, Button, ScrollView, Image, TextInput, AsyncStorage } from 'react-native'
 import axios from 'axios'
 import firebase from 'react-native-firebase'
+import { connect } from 'react-redux';
 
+//actions 
+import { SetToken } from '../actions/home';
 class Login extends Component {
     state = {
         username: "",
@@ -25,7 +28,7 @@ class Login extends Component {
         })
     }
 
-    login = async () => {
+    login = () => {
         axios({
             url: "http://35.243.157.0/login",
             method: "POST",
@@ -44,21 +47,26 @@ class Login extends Component {
             // let token = response.data.token
             // let role = response.data.role
             const {name, profilePic, token, role, username, _id } = response.data
-            
+            const defaultAvatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWROaDgBF1b0LxeIqtVE9C-XbBoGBonouTumjSCtFQB5Hn4BcY'
+            await AsyncStorage.setItem('id', _id);
             await AsyncStorage.setItem('token', token);
             await AsyncStorage.setItem('role', role);
             await AsyncStorage.setItem('name', name);
-            await AsyncStorage.setItem('profilePic', profilePic || '');
+            await AsyncStorage.setItem('profilePic', profilePic || defaultAvatar);
             await AsyncStorage.setItem('username', username);
-            await AsyncStorage.setItem('_id', _id);
-
-            if (role === "seller") {    
+            this.props.SetTokenToRedux(token)
+            if (role === "seller") {
                 // this.props.navigation.navigate('SellerHome')
+                console.log('Masuk ke sini ni! ke seller!')
                 this.props.navigation.navigate('App')
             } else if (role === "buyer") {
+                console.log('Masuk ke buyer!')
                 // this.props.navigation.navigate("BuyerHome")
                 this.props.navigation.navigate('App')
+            }else{
+                console.log('Masuk ke Else!')
             }
+            console.log('Finish!')
         })
         .catch( err => {
             this.inputPassword.clear()
@@ -159,4 +167,9 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Login;
+const mapDispatchtoProps = dispatch => {
+    return {
+        SetTokenToRedux : (token ) => dispatch(SetToken(token))
+    }
+}
+export default connect(null, mapDispatchtoProps)(Login);

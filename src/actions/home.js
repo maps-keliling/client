@@ -1,7 +1,8 @@
 import { SET_CURRENT_POSITION_USER,
          READ_COORDINATE_SELLER, 
          SEARCH,
-         LOADING_READ_USER } from '../actions_types/index';
+         LOADING_READ_USER,
+        SET_TOKEN } from '../actions_types/index';
 import firebase from 'react-native-firebase';
 
 export const setCurrentPositionUser = (payload ) => {
@@ -34,5 +35,12 @@ export const Search = (payload) => {
             type : SEARCH,
             value : payload
         })
+    }
+}
+
+export const SetToken = (payload) => {
+    return {
+        type : SET_TOKEN,
+        value : payload
     }
 }

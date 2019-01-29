@@ -20,9 +20,9 @@ const AppNavigator = createBottomTabNavigator({
     ChatList : {
         screen : ChatList
     },
-    ChatRoom : {
-        screen : ChatRoom
-    },
+    // ChatRoom : {
+    //     screen : ChatRoom
+    // },
     SellerDetail: {
         screen: SellerDetail
     },

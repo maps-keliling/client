@@ -25,6 +25,10 @@ const DrawerNavigator = createDrawerNavigator(
             ChatList: ChatList,
             ChatDetail: ChatDetail,
         }),
+        Map : Home,
+        Chats : ChatList,
+        // SellerDetail : SellerDetail,
+        // ChatList,
     },
     {
         backBehavior: "none",

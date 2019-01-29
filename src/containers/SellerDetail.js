@@ -31,13 +31,10 @@ class SellerDetail extends Component {
             }
         })
         .then(({ data }) => {
-            console.log(  data )
            this.setState({
                name : data.name,
                brand : data.shopId.brand,
                itemList : data.shopId.itemList
-           }, ()=>{
-               console.log(this.state)
            })
         })
         .catch(error => {
@@ -143,7 +140,9 @@ class SellerDetail extends Component {
                             style={styles.menuIcon}
                         ></Image>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={()=>this.props.navigation.navigate('RouteToSeller',{
+                        coordinate : this.props.navigation.getParam('coordinate')
+                    })}>
                         <Image
                             source={require("../assets/marker.png")}
                             style={styles.menuIcon}

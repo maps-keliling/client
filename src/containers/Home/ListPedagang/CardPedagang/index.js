@@ -5,22 +5,34 @@ class Pedagang extends Component {
     state = {
         jarak : 0
     }
-    componentDidMount(){
+
+    calculate = ( ) => {
         let distance = Number(this.props.distance).toFixed(2)
-       if( distance >= 1000){
-            satuan = 'Km'
-            let km = Math.floor(distance / 1000)
-            let sisa = distance % 1000
-            this.setState({jarak : String(km+','+String(sisa).substring(0,2)+ ' Km')})
-          }else{
-            this.setState({jarak : String(distance + ' Meter')})
+        if( distance >= 1000){
+             satuan = 'Km'
+             let km = Math.floor(distance / 1000)
+             let sisa = distance % 1000
+             this.setState({jarak : String(km+','+String(sisa).substring(0,2)+ ' Km')})
+           }else{
+             this.setState({jarak : String(distance + ' Meter')})
+        }
+    }
+    componentDidMount(){
+       this.calculate()
+    }
+
+    componentDidUpdate(prevProps){
+        if (prevProps.distance !== this.props.distance){
+            this.calculate()
         }
     }
 
     render(){
         return (
-            <TouchableOpacity style={styles.container} onPress={()=> this.props.navigation.navigate('SellerDetail', {
-                id : this.props.id
+            <TouchableOpacity style={styles.container} 
+                onPress={()=> this.props.navigation.navigate('SellerDetail', {
+                id : this.props.id,
+                coordinate : this.props.coordinate
             })} >
                 <View style={styles.ImageWrapper}>
                     <Image 

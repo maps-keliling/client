@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
 import CardPedagang from './CardPedagang';
 import { connect } from 'react-redux';
 import haversine from 'haversine';
@@ -8,7 +8,8 @@ class ListPedagang extends Component {
         ListPedagang : []
     }
 
-    sortingNearest = () => {
+    sortingNearest = (asal) => {
+        console.log(asal)
         const currentPosition =  {
            ...this.props.userPosition
         }
@@ -29,25 +30,34 @@ class ListPedagang extends Component {
         
     }
     componentDidMount(){
-        this.sortingNearest()
+        this.sortingNearest('dari did mount!')
     }
 
     componentDidUpdate(prevProps){
         if(prevProps.userPosition.latitude !== this.props.userPosition.latitude || prevProps.userPosition.longitude !== this.props.userPosition.longitude || this.props.allUsers.length !== prevProps.allUsers.length){
-            this.sortingNearest()
+            this.sortingNearest('dari did update !')
         }
     }
 
     render(){
         return (
-            <ScrollView style={styles.container}>
-                 {  
-                    this.state.ListPedagang.length !== 0 ? this.state.ListPedagang.map((pedagang, index) => {
+            <>
+            {
+                this.props.loading ? 
+                (
+                    <ActivityIndicator style={{alignSelf : 'center'}} size="large" color="#00ff00" />
+                )  
+                :
+                (<ScrollView style={styles.container}>
+                    {  
+                        this.state.ListPedagang.map((pedagang, index) => {
                         return <CardPedagang key={index} {...pedagang} {...this.props}/>
-                     })
-                     : null
-                 }
-            </ScrollView>
+                        })
+                    }
+                </ScrollView>)
+            }
+            </>
+            
         )
     }
 }
@@ -67,7 +77,8 @@ const styles = StyleSheet.create({
 const mapStatetoProps = state => {
     return {
         allUsers :state.home.allUsers.filter(item => item.brand.toLowerCase().includes(state.home.keyword.toLowerCase())),
-        userPosition : state.home.userPosition
+        userPosition : state.home.userPosition,
+        loading : state.home.loading
     }
 }
 export default connect(mapStatetoProps, null)(ListPedagang);

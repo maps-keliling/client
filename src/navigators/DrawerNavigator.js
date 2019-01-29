@@ -6,6 +6,7 @@ import React from 'react'
 import { View, Text, Image, TouchableHighlight, AsyncStorage } from 'react-native';
 import Home from '../containers/Home'
 import SellerDetail from '../containers/SellerDetail';
+<<<<<<< HEAD
 import SideBar from '../components/Sidebar'
 const DrawerNavigator = createDrawerNavigator(
     {      
@@ -13,6 +14,16 @@ const DrawerNavigator = createDrawerNavigator(
         Chats : ChatList,
         // SellerDetail : SellerDetail,
         // ChatList,
+=======
+import RoutetoSeller from '../containers/RouteArah/index';
+const DrawerNavigator = createDrawerNavigator(
+    {      
+        MapScreen: Home,
+        ChatScreen,
+        SellerDetail : SellerDetail,
+        RouteToSeller : RoutetoSeller,
+        ChatList,
+>>>>>>> tracking
     },
     {
         backBehavior: "none",

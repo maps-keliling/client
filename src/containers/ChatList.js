@@ -53,22 +53,57 @@ class ChatList extends Component {
             picture: "",
             name: "Tukul",
             lastChat: "Halo kak, pesanannya sudah sesuai aplikasi ?"
-        }]
+        }],
+        myChat: [],
+        role: ''
     }
 
     componentDidMount = async () => {
         const myId = await AsyncStorage.getItem('_id')
-        console.log(myId, 'ini id sayay')
+        const role = await AsyncStorage.getItem('role')
+        // console.log(myId, 'ini id sayay')
+        firebase.database().ref('chat').once('value', (snapshot) => {
+            console.log(snapshot.val(), 'ini dari chat list')
+            const ArrayOfChatRoom = Object.entries(snapshot.val()).map(item => ({...item[1], key: item[0]}));
+            // console.log(ArrayOfChatRoom)
+            const filteredChatRoom = ArrayOfChatRoom.filter(each =>  {
+                const idRegex = new RegExp(myId)
+                if (idRegex.test(each.key)) {
+                    return each
+                }
+            })
+            const keyMessage = filteredChatRoom.map(each => each.messageId)
+            // console.log(filteredChatRoom, 'ini filtered')
+            // console.log(keyMessage, 'ini key only')
+
+            firebase.database().ref('message').once('value', (snapshot) => {
+                const ArrayOfChat = Object.entries(snapshot.val()).map(item => ({...item[1], key: item[0]}));
+                // console.log(snapshot.val(), 'ini dari message')
+                const chatFiltered = ArrayOfChat.filter(eachChat => {
+                    for (let i = 0; i < keyMessage.length; i++) {
+                        if (eachChat.key === keyMessage[i]) {
+                            return eachChat
+                        }
+                    }
+                })
+                console.log(chatFiltered, 'ini chat filtered')
+                this.setState({
+                    myChat: chatFiltered,
+                    role: role
+                })
+            })
+        })
     }
 
     render() {
+        const { role } = this.state
         return (
             <View>
                 <BurgerMenu style={styles.burgerMenu} {...this.props}></BurgerMenu>
                 <View style={styles.topMenu}>
                     <Text style={styles.title}>Chat</Text>
                 </View>
-                <FlatList
+                {/* <FlatList
                     data={this.state.chatList}
                     renderItem={({item}) => (
                         <TouchableOpacity
@@ -88,6 +123,31 @@ class ChatList extends Component {
                                     :
                                     <Text style={styles.chatDetail}>{item.lastChat}</Text>
                                     }
+                            </View>
+                        </TouchableOpacity>
+                    )}
+                /> */}
+                <FlatList
+                    data={this.state.myChat}
+                    renderItem={({item}) => (
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('ChatRoom')}
+                            style={styles.eachChat}
+                        >   
+                            <Image
+                                source={require('../assets/profile.png')}
+                                style={styles.profilePicture}
+                            />
+                            <View style={styles.chatInfo}>
+                                <Text style={styles.name}>{role === 'buyer' ? item.seller.name : item.buyer.name}</Text>
+                                {/* <Text style={styles.name}>{item.name}</Text>
+                                {item.lastChat.length > 25 ? 
+                                    <Text style={styles.chatDetail}>{item.lastChat.slice(0, 25)}  
+                                        <Text style={{color: '#283D85'}}>       ...more</Text>
+                                    </Text>
+                                    :
+                                    <Text style={styles.chatDetail}>{item.lastChat}</Text>
+                                    } */}
                             </View>
                         </TouchableOpacity>
                     )}

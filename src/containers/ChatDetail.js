@@ -104,7 +104,7 @@ export default class ChatDetail extends Component {
     const chatkey = navigation.getParam('chatKey', '')
     // const myId = '1234abc'
     const { myChat, messages, myId } = this.state
-    // console.log(messages)
+    console.log(myId, 'ini id dari chat')
     return (
       <GiftedChat
         messages={this.state.myChat}

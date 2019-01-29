@@ -43,15 +43,16 @@ class Login extends Component {
 
             // let token = response.data.token
             // let role = response.data.role
-            const {name, profilePic, token, role, username } = response.data
-
+            const {name, profilePic, token, role, username, _id } = response.data
+            
             await AsyncStorage.setItem('token', token);
             await AsyncStorage.setItem('role', role);
             await AsyncStorage.setItem('name', name);
-            await AsyncStorage.setItem('profilePic', profilePic);
+            await AsyncStorage.setItem('profilePic', profilePic || '');
             await AsyncStorage.setItem('username', username);
+            await AsyncStorage.setItem('_id', _id);
 
-            if (role === "seller") {
+            if (role === "seller") {    
                 // this.props.navigation.navigate('SellerHome')
                 this.props.navigation.navigate('App')
             } else if (role === "buyer") {

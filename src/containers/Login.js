@@ -38,11 +38,18 @@ class Login extends Component {
             this.inputUsername.clear()
             this.inputPassword.clear()
 
-            let token = response.data.token
-            let role = response.data.role
+            console.log('login======')
+            console.log(response.data)
+
+            // let token = response.data.token
+            // let role = response.data.role
+            const {name, profilePic, token, role, username } = response.data
 
             await AsyncStorage.setItem('token', token);
             await AsyncStorage.setItem('role', role);
+            await AsyncStorage.setItem('name', name);
+            await AsyncStorage.setItem('profilePic', profilePic);
+            await AsyncStorage.setItem('username', username);
 
             if (role === "seller") {
                 // this.props.navigation.navigate('SellerHome')
@@ -74,9 +81,6 @@ class Login extends Component {
                         source={require("../assets/login.png")}
                     />
                 </View>
-                <Text>
-                    ini harusnya firebase 
-                </Text>
                 <Text style={styles.textBody}>Silahkan Masuk</Text>
                 <Text style={styles.info}>{message}</Text>
                 <TextInput

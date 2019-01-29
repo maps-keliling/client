@@ -9,7 +9,8 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <SwitchNavigator />
+        {/* <SwitchNavigator /> */}
+        <TestNavigator />
       </Provider>
     );
   }

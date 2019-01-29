@@ -2,23 +2,42 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 class Pedagang extends Component {
+    state = {
+        jarak : 0
+    }
+    componentDidMount(){
+        let distance = Number(this.props.distance).toFixed(2)
+       if( distance >= 1000){
+            satuan = 'Km'
+            let km = Math.floor(distance / 1000)
+            let sisa = distance % 1000
+            this.setState({jarak : String(km+','+String(sisa).substring(0,2)+ ' Km')})
+          }else{
+            this.setState({jarak : String(distance + ' Meter')})
+        }
+    }
+
     render(){
         return (
-            <TouchableOpacity style={styles.container} >
+            <TouchableOpacity style={styles.container} onPress={()=> this.props.navigation.navigate('SellerDetail', {
+                id : this.props.id
+            })} >
                 <View style={styles.ImageWrapper}>
                     <Image 
                         source={require("../../../../assets/street-vendor.png")}
                         style={styles.photo}/>
                 </View>
                 <View style={styles.DataPedagang}>
-                    <Text style={{alignItems :'center'}}>Gerobak Ipul</Text>
+                    <Text style={{alignItems :'center'}}>{this.props.brand}</Text>
                     <Text style={{alignItems :'center'}}>
-                        <Image 
+                        {this.state.jarak}
+                        {/* {this.convertJarak(this.props.distance)}
+                        {/* <Image 
                             source={{uri : 'http://icons.iconarchive.com/icons/gpritiranjan/simple-christmas/512/star-icon.png'}}
                             style={styles.star}/>
                         <Image 
                             source={{uri : 'http://icons.iconarchive.com/icons/gpritiranjan/simple-christmas/512/star-icon.png'}}
-                            style={styles.star}/>
+                            style={styles.star}/> */} 
                     </Text>
                 </View>
             </TouchableOpacity>
@@ -61,4 +80,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Pedagang;'30%'
+export default Pedagang;

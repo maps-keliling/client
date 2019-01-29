@@ -3,6 +3,7 @@ package com.client;
 import android.app.Application;
 import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 import com.facebook.react.ReactApplication;
+import com.horcrux.svg.SvgPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.airbnb.android.react.maps.MapsPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SvgPackage(),
             new RNFirebasePackage(),
             new VectorIconsPackage(),
             new MapsPackage(),

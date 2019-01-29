@@ -1,24 +1,24 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-//081314782109
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, TextInput, TouchableOpacity, Image} from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker,Polyline } from 'react-native-maps';
-import { PermissionsAndroid, BackHandler, DeviceEventEmitter, Linking } from 'react-native';
+import {Platform, StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
+import MapView, { PROVIDER_GOOGLE, Marker,Polyline,Callout  } from 'react-native-maps';
+import { PermissionsAndroid,Image, BackHandler, DeviceEventEmitter, Linking } from 'react-native';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 import axios from 'axios';
 const APIKEY_GOOGLE_DIRECTION = 'AIzaSyAwiEbbtLePgCOrTpqCeTYQ8qmt-pxX1bE';
 import polyline from '@mapbox/polyline';
 import StyleMaps from '../StyleMap.json';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { DrawerActions, withNavigation } from 'react-navigation';
-import BurgerMenu from '../../../components/burgerMenu'
+import SearchBar from './SeacrhBar/index';
+import { connect } from 'react-redux';
+import haversine from 'haversine';
+import CustomMarker from './CustomMarker/index';
 
+
+
+import BurgerMenu from '../../../components/burgerMenu';
+import Icon from 'react-native-vector-icons/FontAwesome';
+//actions 
+import { setCurrentPositionUser } from '../../../actions/home';
 class App extends Component{
   state = {
     latitude: -6.265299,
@@ -84,7 +84,10 @@ class App extends Component{
         latitude, longitude
       }, () => {
           this.handleCenter()
-          this.getDirections()
+          this.props.setPosition({
+            latitude : this.state.latitude,
+            longitude : this.state.longitude
+          })
       })
     }, (error) => {
       console.log('ini adaalah error :', error)
@@ -115,6 +118,26 @@ class App extends Component{
     }
   }
 
+  calculateDistance = (data) => {
+    const target = {
+      latitude : data.lat,
+      longitude : data.long
+    }
+    const currentPosition =  {
+      latitude : this.state.latitude, 
+      longitude : this.state.longitude
+    }
+
+    let distance = haversine(currentPosition, target, {unit : 'meter'}).toFixed(2)
+    if( distance >= 1000){
+      let km = Math.floor(distance / 1000)
+      let sisa = distance % 1000
+      return String((km+','+String(sisa).substring(0,2))+ ' Km')
+    }else{
+      return String(distance + ' Meter')
+    }
+  }
+
   handleCenter = () => {
     const { latitude, longitude, latitudeDelta, longitudeDelta } = this.state;
     this.map.animateToRegion({
@@ -132,21 +155,6 @@ class App extends Component{
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.topMenu}>
-          <BurgerMenu {...this.props}/>
-          <View style={styles.searchBar}>
-            <View>
-              <TextInput placeholder="cari makanan favorite anda.."/>
-            </View>
-            <TouchableOpacity
-              style={styles.searchButton}
-            >
-              <Icon 
-                name="search"
-                size={25}/>
-            </TouchableOpacity>
-          </View>
-        </View>
         <MapView 
           ref={map => {this.map = map}}
           provider={PROVIDER_GOOGLE} // remove if not using Google Maps
@@ -158,18 +166,30 @@ class App extends Component{
             latitudeDelta: this.state.latitudeDelta,
             longitudeDelta: this.state.longitudeDelta,
           }}
+          showsUserLocation={true}
+        
         >
-          <Marker
-            coordinate={{...this.state}}
-            title={'Curent Position'}
-            description={'Ini adalah current position'}
-            />
+          {this.props.allUsers.length !== 0 ? this.props.allUsers.map((user, index) => {
+            return (
+            <Marker 
+              key={index} 
+              coordinate={{latitude : user.coordinate.lat, longitude:user.coordinate.long}} 
+              title={user.brand} 
+              description={this.calculateDistance(user.coordinate)}
+              onCalloutPress={()=> this.props.navigation.navigate('SellerDetail', {
+                id : user.id
+              })}>
+                <CustomMarker {...user}/>
+            </Marker>
+           )
+          }) : null}
           <Polyline
             coordinates={this.state.coords}
             strokeWidth={2}
             strokeColor="red"/>
         </MapView>
-    </View>
+        <SearchBar {...this.props}/>
+      </View>
     );
   }
 }
@@ -227,4 +247,16 @@ const styles = StyleSheet.create({
   }
  });
 
- export default withNavigation(App)
+ const mapStatetoProps = state => {
+   return {
+     allUsers : state.home.allUsers
+   }
+ }
+
+ const mapDispatchtoProps = dispatch => {
+   return {
+     setPosition : (data) => dispatch(setCurrentPositionUser(data))
+   }
+ }
+
+ export default connect(mapStatetoProps, mapDispatchtoProps)(withNavigation(App))

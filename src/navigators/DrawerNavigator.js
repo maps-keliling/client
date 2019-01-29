@@ -4,11 +4,12 @@ import ChatScreen from '../containers/ChatScreen';
 import React from 'react'
 import { View, Text, Image, TouchableHighlight, AsyncStorage } from 'react-native';
 import Home from '../containers/Home'
-
+import SellerDetail from '../containers/SellerDetail';
 const DrawerNavigator = createDrawerNavigator(
     {      
         MapScreen: Home,
         ChatScreen,
+        SellerDetail : SellerDetail
     },
     {
         backBehavior: "none",

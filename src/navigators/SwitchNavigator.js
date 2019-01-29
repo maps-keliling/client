@@ -10,7 +10,6 @@ const AppSwitchNavigator = createSwitchNavigator({
     // App: AppStack,
     Auth: Login,
     Register: Register,
-
     App: { screen: AppDrawerNavigator }
 });
 

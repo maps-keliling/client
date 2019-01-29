@@ -8,6 +8,7 @@ import SellerDetail from '../containers/SellerDetail'
 import ShopDetail from '../containers/ShopDetail'
 import AddItem from '../containers/AddItem'
 import Route from '../containers/RouteArah/index';
+
 const AppNavigator = createBottomTabNavigator({
     Login: {
         screen: Login
@@ -29,12 +30,9 @@ const AppNavigator = createBottomTabNavigator({
     },
     ShopDetail: {
         screen: ShopDetail
-    }, 
-    AddItem: {
-        screen: AddItem
     }
 }, {
-    initialRouteName: 'AddItem'
+    initialRouteName: 'ShopDetail'
 })
 
 const AppContainer = createAppContainer(AppNavigator)

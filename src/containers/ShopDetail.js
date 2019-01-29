@@ -1,14 +1,19 @@
 import React, { Component } from 'react'
-import { AsyncStorage, View, Text, StyleSheet, Image, TextInput, FlatList, Dimensions, ScrollView, Switch, TouchableOpacity, Alert } from 'react-native'
+import { AsyncStorage, View, Text, StyleSheet, Button, Image, TextInput, FlatList, Dimensions, ScrollView, Switch, TouchableOpacity, Alert } from 'react-native'
 import { scale } from '../helpers/scaling';
 import axios from 'axios'
+import Modal from 'react-native-modalbox'
 
 class ShopDetail extends Component {
     state = {
         token: "",
-        brandName: "Sate Maranggi Blok M",
+        brandName: "",
         shopStatus: false,
         listItems: [],
+        swipeToClose: true,
+        // isOpen: false,
+        inputNewFood: "",
+        inputPrice: ""
     }
 
     componentDidMount = async () => {
@@ -83,13 +88,42 @@ class ShopDetail extends Component {
             }
         })
         .then( response => {
-            console.log(response.data.itemList);
+            console.log(response.data.brand);
             this.setState({
+                listItems: response.data.itemList,
+                brandName: response.data.brand
+            })
+        })
+        .catch( err => {
+            console.log(err.response);
+        })
+    }
+
+    addFood = () => {
+        console.log(this.state.inputNewFood, this.state.inputPrice, 'hahaha');
+        axios({
+            url: `http://35.243.157.0/items`,
+            method: `POST`,
+            headers: {
+                auth: this.state.token
+            },
+            data: {
+                name: this.state.inputNewFood,
+                price: this.state.inputPrice
+            }
+        })
+        .then( response => {
+            // console.log(response.data.itemList);
+            this.setState({
+                inputNewFood: "",
+                inputPrice: "",
+                isOpen: false,
                 listItems: response.data.itemList
             })
         })
         .catch( err => {
             console.log(err.response);
+            // error belum terhandle
         })
     }
 
@@ -132,14 +166,40 @@ class ShopDetail extends Component {
                             />
                         </View>
                         <TouchableOpacity
-                            // onPress={function untuk add new item}
+                            onPress={() => this.setState({isOpen: true, current})}
                         >
                             <Image
-                                source={require("../assets/edit.png")}
+                                source={require("../assets/add.png")}
                                 style={styles.editIcon}
                             />
                         </TouchableOpacity>
                     </View>
+
+                    <Modal isOpen={this.state.isOpen} onClosed={() => this.setState({isOpen: false})} coverScreen={true} style={styles.modal} position={"center"}>
+                        <Text style={styles.titleText}>Tambah menu baru</Text>
+                        <View>
+                            <TextInput
+                                autoCapitalize="none"
+                                style={styles.inputForm}
+                                placeholder="Nama menu"
+                                ref={input => { this.inputFood = input }}
+                                onChangeText={(text) => this.handleChange('inputNewFood', text)}
+                                underlineColorAndroid="#F0E9E0"
+                            ></TextInput>
+                            <TextInput
+                                autoCapitalize="none"
+                                style={styles.inputForm}
+                                placeholder="Harga"
+                                ref={input => { this.inputPrice = input }}
+                                onChangeText={(text) => this.handleChange('inputPrice', text)}
+                                underlineColorAndroid="#F0E9E0"
+                            ></TextInput>
+                            <Button onPress={() => this.addFood()} title="Tambah" color="#ab1919"></Button>
+                        </View>
+
+                    </Modal>
+                
+
                     
                     <FlatList
                         horizontal={false}
@@ -172,6 +232,8 @@ class ShopDetail extends Component {
                             </View>
                         )}
                     />
+
+
                 </ScrollView>
             </View>
         )
@@ -181,6 +243,20 @@ class ShopDetail extends Component {
 const win = Dimensions.get('window')
 
 const styles = StyleSheet.create({
+    titleText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 25
+    },
+    inputForm: {
+        fontSize: 18,
+        marginVertical: 2
+    },
+    modal: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 300,
+    },
     editBrand: {
         flexDirection: 'row',
         justifyContent: 'center',

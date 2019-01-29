@@ -10,7 +10,8 @@ class Register extends Component {
         address: "",
         password: "",
         role: "seller", 
-        errors: []
+        errors: [],
+        shopName: "" // BELUM MASUK AXIOS YAA
     }
 
     register = () => {
@@ -118,6 +119,17 @@ class Register extends Component {
                     <Picker.Item label="Penjual" value="seller" />
                     <Picker.Item label="Pembeli" value="buyer" />
                 </Picker>
+                {this.state.role === "seller" && 
+                    <TextInput
+                        style={styles.inputNumber}
+                        placeholder="Nama Toko"
+                        underlineColorAndroid="#F0E9E0"
+                        ref={input => { this.inputPassword = input }}
+                        onChangeText={(text) => this.handleChange('shopName', text)}
+                    ></TextInput>
+                }
+
+
                 {this.state.errors.length > 0 && 
                     <View>
                         {this.state.errors.map((error, i) => 
@@ -128,7 +140,7 @@ class Register extends Component {
                 <View style={styles.buttonContainer}>
                     <Button
                         title="Daftar" 
-                        color="#e1391b"
+                        color="#ab1919"
                         onPress={this.register}
                     ></Button>
                     <TouchableOpacity

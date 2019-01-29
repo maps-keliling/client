@@ -44,6 +44,11 @@ class SellerDetail extends Component {
             console.log(error)
         })
       
+
+    }
+
+    testCall = () => {
+        Linking.openURL('tel:0816297325').catch((err) => console.error('An error occurred', err));
     }
 
     render() {
@@ -51,29 +56,29 @@ class SellerDetail extends Component {
             <View style={styles.container}>
                 <View>
                     <ScrollView>
-                <View style={styles.profileContainer}>
-                    <Image
-                        source={require("../assets/profile.png")}
-                        style={styles.imageProfile}
-                    ></Image>
-                    <Text style={styles.name}>{this.state.name}</Text>
-                    <Text style={styles.brand}>{this.state.brand}</Text>
-                </View>
-                <FlatList
-                    style={styles.flatList}
-                    data={this.state.itemList}
-                    renderItem={({item}) => (
-                        <View style={styles.itemContainer}>
+                        <View style={styles.profileContainer}>
                             <Image
-                                source={require("../assets/food.png")}
-                                style={styles.imageFood}
+                                source={require("../assets/profile.png")}
+                                style={styles.imageProfile}
                             ></Image>
-                            <Text style={styles.itemName}>{item.name}</Text>
-                            <Text style={styles.itemPrice}>{item.price}</Text>
+                            <Text style={styles.name}>{this.state.name}</Text>
+                            <Text style={styles.brand}>{this.state.brand}</Text>
                         </View>
-                    )}
-                />
-            </ScrollView>
+                        <FlatList
+                            style={styles.flatList}
+                            data={this.state.itemList}
+                            renderItem={({item}) => (
+                                <View style={styles.itemContainer}>
+                                    <Image
+                                        source={require("../assets/food.png")}
+                                        style={styles.imageFood}
+                                    ></Image>
+                                    <Text style={styles.itemName}>{item.name}</Text>
+                                    <Text style={styles.itemPrice}>{item.price}</Text>
+                                </View>
+                            )}
+                        />
+                    </ScrollView>
                 </View>
                 <View style={styles.bottomMenu}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate("ChatRoom")}>

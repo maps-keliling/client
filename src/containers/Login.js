@@ -99,12 +99,12 @@ class Login extends Component {
                 <Text style={styles.textError}>{this.state.error}</Text>
                 <View style={styles.buttonContainer}>
                     <Button 
-                        color="#e1391b"
+                        color="#ab1919"
                         title='Masuk' onPress={() => this.login()}></Button>
                 </View>
                 <View style={styles.buttonContainer}>
                     <Button 
-                        color="#e1391b"
+                        color="#ab1919"
                         title='Daftar' onPress={() => this.props.navigation.navigate('Register')}></Button>
                 </View>
             </ScrollView>

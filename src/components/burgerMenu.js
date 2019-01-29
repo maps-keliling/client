@@ -8,7 +8,7 @@ class BurgerMenu extends Component {
 
     render() {
         return (
-            <View style={styles.menu}>
+            <View style={{...styles.menu, ...this.props.style}}>
                 <TouchableOpacity
                     onPress={this.openDrawer}
                 >
@@ -26,7 +26,12 @@ const styles = StyleSheet.create({
     menu: {
         marginHorizontal: 10,
         borderRadius: 50,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 2,
+        shadowRadius: 2,
+        elevation: 5,
     },
     menuIcon: {
         width: 50,

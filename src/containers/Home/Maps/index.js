@@ -223,15 +223,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'flex-end'
   },
-  menu: {
-    marginHorizontal: 10,
-    borderRadius: 50,
-    backgroundColor: 'white'
-  },
-  menuIcon: {
-    width: 50,
-    height: 50
-  },
   searchBar: {
     paddingHorizontal: 20,
     marginHorizontal: 5,
@@ -239,6 +230,11 @@ const styles = StyleSheet.create({
     flexDirection : 'row',
     borderRadius : 25,
     backgroundColor : 'white',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 2,
+    elevation: 3,
   },
   inputLocation : {
     width : '100%',

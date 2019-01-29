@@ -1,6 +1,7 @@
 import { SET_CURRENT_POSITION_USER,
          READ_COORDINATE_SELLER, 
-         SEARCH } from '../actions_types/index';
+         SEARCH,
+         LOADING_READ_USER } from '../actions_types/index';
 import firebase from 'react-native-firebase';
 
 export const setCurrentPositionUser = (payload ) => {
@@ -14,6 +15,9 @@ export const setCurrentPositionUser = (payload ) => {
 
 export const ReadData = () => {
     return dispatch => {
+        dispatch({
+            type : LOADING_READ_USER
+        })
         firebase.database().ref('/seller').on('value', snapshot => {
             const ArrayOfdata = Object.entries(snapshot.val()).map(item => ({...item[1], id: item[0]}));
           dispatch({

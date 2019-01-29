@@ -7,7 +7,7 @@ import ChatRoom from '../containers/ChatRoom'
 import SellerDetail from '../containers/SellerDetail'
 import ShopDetail from '../containers/ShopDetail'
 import AddItem from '../containers/AddItem'
-
+import Route from '../containers/RouteArah/index';
 const AppNavigator = createBottomTabNavigator({
     Login: {
         screen: Login

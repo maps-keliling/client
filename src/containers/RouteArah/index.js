@@ -6,28 +6,25 @@ import LocationServicesDialogBox from "react-native-android-location-services-di
 import axios from 'axios';
 const APIKEY_GOOGLE_DIRECTION = 'AIzaSyAwiEbbtLePgCOrTpqCeTYQ8qmt-pxX1bE';
 import polyline from '@mapbox/polyline';
-import StyleMaps from '../StyleMap.json';
+import StyleMaps from './StyleMap.json';
 import { DrawerActions, withNavigation } from 'react-navigation';
-import SearchBar from './SeacrhBar/index';
 import { connect } from 'react-redux';
 import haversine from 'haversine';
-import CustomMarker from './CustomMarker/index';
-
-
-
-import BurgerMenu from '../../../components/burgerMenu';
-import Icon from 'react-native-vector-icons/FontAwesome';
-//actions 
-import { setCurrentPositionUser } from '../../../actions/home';
+import Transportation from './Transportation/index';
+import NavigationMap from './Navigations/index';
 class App extends Component{
+  
   state = {
-    latitude: -6.265299,
-    longitude: 106.782836,
     latitudeDelta: 0.015,
     longitudeDelta: 0.0121,
     coords : [],
-    map : React.createRef()
+    map : React.createRef(),
+    penjual : {
+        latitude : -6.2656513,
+        longitude : 106.7806633
+    }
   }
+  
   startNavigation = () => {
     var url = "https://www.google.com/maps/dir/?api=1&origin=75+9th+Ave+New+York,+NY&travelmode=driving&dir_action=navigate&destination=MetLife+Stadium+1+MetLife+Stadium+Dr+East+Rutherford,+NJ+07073";
     Linking.canOpenURL(url).then(supported => {
@@ -36,26 +33,27 @@ class App extends Component{
       } else {
           //return Linking.openURL(url);
       }
-  }).catch(err => console.error('An error occurred', err)); 
+    }).catch(err => console.error('An error occurred', err)); 
   }
-  getDirections = async ( destination ) => {
-    // let { data } = await axios.get(`https://maps.googleapis.com/maps/api/directions/json?
-    //            origin=${this.state}
-    //            &destination=${{latitude:-6.2711693,longitude: 106.7777011}}&key=${APIKEY_GOOGLE_DIRECTION}`)
 
-    let { data } = await axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=75+9th+Ave+New+York,+NY&destination=MetLife+Stadium+1+MetLife+Stadium+Dr+East+Rutherford,+NJ+07073&key=${APIKEY_GOOGLE_DIRECTION}`)
-    let data_encoded = polyline.decode(data.routes[0].overview_polyline.points)
-    let routes = data_encoded.map((point, index) => {
-      return {
-        latitude : point[0],
-        longitude : point[1]
-      }
-    })
-    this.setState({
-      coords : routes
-    }, () => {
-      this.startNavigation()
-    })
+  getDirections = async ( mode ) => {
+    let {lat, long} = this.props.navigation.getParam('coordinate')
+    const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.latitude},${this.state.longitude}&destination=${lat},${long}&mode=${mode}&key=${APIKEY_GOOGLE_DIRECTION}`
+    try {
+        let { data } = await axios.get(url)
+        let data_encoded = polyline.decode(data.routes[0].overview_polyline.points)
+        let routes = data_encoded.map((point, index) => {
+            return {
+                latitude : point[0],
+                longitude : point[1]
+            }
+        })
+        this.setState({
+            coords : routes
+        })
+    }catch(e){
+        console.log('ini adalah error google directions :', e);
+    }
   }
 
   cekMapsEnaled = async () => {
@@ -84,10 +82,6 @@ class App extends Component{
         latitude, longitude
       }, () => {
           this.handleCenter()
-          this.props.setPosition({
-            latitude : this.state.latitude,
-            longitude : this.state.longitude
-          })
       })
     }, (error) => {
       console.log('ini adaalah error :', error)
@@ -146,6 +140,23 @@ class App extends Component{
       latitudeDelta,
       longitudeDelta
     })
+    this.getDirections(this.state.penjual)
+  }
+
+  changeTransport = (mode) => {
+    switch(mode){
+      case 'mobil :' :
+        this.getDirections(this.state.penjual, 'driving')
+        break;
+      case 'man' : 
+        this.getDirections(this.state.penjual, 'walking')
+        break;
+      case 'sepeda':
+        this.getDirections(this.state.penjual, 'bicycling')
+        break;
+      default :
+      this.getDirections(this.state.penjual, 'driving')
+    }
   }
 
   componentDidMount(){
@@ -153,6 +164,7 @@ class App extends Component{
   }
 
   render() {
+    let {lat, long} = this.props.navigation.getParam('coordinate')
     return (
       <View style={styles.container}>
         <MapView 
@@ -161,34 +173,23 @@ class App extends Component{
           customMapStyle={StyleMaps}
           style={styles.map}
           initialRegion={{
-            latitude : this.state.latitude,
-            longitude : this.state.longitude,
+            latitude : this.props.currentPosition.latitude,
+            longitude : this.props.currentPosition.longitude,
             latitudeDelta: this.state.latitudeDelta,
             longitudeDelta: this.state.longitudeDelta,
-          }}
-          showsUserLocation={true}
-        
-        >
-          {this.props.allUsers.length !== 0 ? this.props.allUsers.map((user, index) => {
-            return (
-            <Marker 
-              key={index} 
-              coordinate={{latitude : user.coordinate.lat, longitude:user.coordinate.long}} 
-              title={user.brand} 
-              description={this.calculateDistance(user.coordinate)}
-              onCalloutPress={()=> this.props.navigation.navigate('SellerDetail', {
-                id : user.id
-              })}>
-                <CustomMarker {...user}/>
-            </Marker>
-           )
-          }) : null}
+          }}>
+          <Marker
+            coordinate={{latitude : this.props.currentPosition.latitude, longitude : this.props.currentPosition.longitude}}/>
+          <Marker
+            coordinate={{latitude : lat, longitude : long}}/>
+
           <Polyline
             coordinates={this.state.coords}
             strokeWidth={2}
             strokeColor="red"/>
         </MapView>
-        <SearchBar {...this.props}/>
+        <Transportation changeTransport={this.changeTransport}/>
+        <NavigationMap/>
       </View>
     );
   }
@@ -249,13 +250,13 @@ const styles = StyleSheet.create({
 
  const mapStatetoProps = state => {
    return {
-     allUsers : state.home.allUsers
+       currentPosition : state.home.userPosition
    }
  }
 
  const mapDispatchtoProps = dispatch => {
    return {
-     setPosition : (data) => dispatch(setCurrentPositionUser(data))
+
    }
  }
 

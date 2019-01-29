@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet, ScrollView} from 'react-native';
 import CardPedagang from './CardPedagang';
 import { connect } from 'react-redux';
 import haversine from 'haversine';
@@ -40,14 +40,14 @@ class ListPedagang extends Component {
 
     render(){
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                  {  
-                    this.state.ListPedagang.length !== 0 ? this.state.ListPedagang.slice(0, 3).map((pedagang, index) => {
+                    this.state.ListPedagang.length !== 0 ? this.state.ListPedagang.map((pedagang, index) => {
                         return <CardPedagang key={index} {...pedagang} {...this.props}/>
                      })
                      : null
                  }
-            </View>
+            </ScrollView>
         )
     }
 }
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
 
 const mapStatetoProps = state => {
     return {
-        allUsers : state.home.allUsers,
+        allUsers :state.home.allUsers.filter(item => item.brand.toLowerCase().includes(state.home.keyword.toLowerCase())),
         userPosition : state.home.userPosition
     }
 }

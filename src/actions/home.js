@@ -1,4 +1,6 @@
-import { SET_CURRENT_POSITION_USER, READ_COORDINATE_SELLER } from '../actions_types/index';
+import { SET_CURRENT_POSITION_USER,
+         READ_COORDINATE_SELLER, 
+         SEARCH } from '../actions_types/index';
 import firebase from 'react-native-firebase';
 
 export const setCurrentPositionUser = (payload ) => {
@@ -18,6 +20,15 @@ export const ReadData = () => {
               type : READ_COORDINATE_SELLER,
               value : ArrayOfdata  
           })
+        })
+    }
+}
+
+export const Search = (payload) => {
+    return dispatch => {
+        dispatch({
+            type : SEARCH,
+            value : payload
         })
     }
 }

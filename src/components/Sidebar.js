@@ -1,55 +1,50 @@
 import React, { Component } from 'react';
-import { NavigationActions } from 'react-navigation';
-import { ScrollView, Text, View, StyleSheet, Button } from 'react-native';
+import { createDrawerNavigator, createAppContainer, DrawerItems, withNavigation } from 'react-navigation';
+import { ScrollView, Image, Text, View, StyleSheet, Button, TouchableHighlight, AsyncStorage } from 'react-native';
 // import { Button } from 'react-native-elements';
 // import styles from './Sidebar.style';
 import PropTypes from 'prop-types';
 
 class DrawerContent extends Component {
+  state = {
+    name: 'Guest',
+    role: 'User01',
+    profilePic: '',
+    username: 'User01'
+  }
+  async componentDidMount() {
+    const token = await AsyncStorage.getItem('token', token);
+    const role = await AsyncStorage.getItem('role', role);
+    const name = await AsyncStorage.getItem('name', name);
+    const profilePic = await AsyncStorage.getItem('profilePic', profilePic);
+    const username = await AsyncStorage.getItem('username', username);
 
-  navigateToScreen = (route) => () => {
-    const navigate = NavigationActions.navigate({
-      routeName: route
-    });
-    this.props.navigation.dispatch(navigate);
+    this.setState({
+      name: name || this.state.name,
+      role: role || this.state.role,
+      profilePic: profilePic || this.state.profilePic,
+      username: username || this.state.username
+    })
   }
 
   render () {
     return (
-      <View style={styles.container}>
-        <ScrollView>
-
-          <Text style={styles.separatorTop}>
-          </Text>
-
-          <Button
-            raised
-            icon={{name: 'trash-o', type: 'font-awesome', size: 20}}
-            title='Home'
-            buttonStyle={styles.button}
-            onPress={() => alert('clicked')}/>
-
-          <Text style={styles.sectionHeadingStyle}>
-          </Text>
-
-          <Button
-            raised
-            icon={{name: 'umbrella', type: 'font-awesome', size: 20}}
-            title='Info'
-            buttonStyle={styles.button}
-            onPress={this.navigateToScreen('Info')}/>
-
-          <Text style={styles.sectionHeadingStyle}>
-          </Text>
-
-          <Button
-            raised
-            icon={{name: 'user-circle', type: 'font-awesome', size: 20}}
-            title='Another Button'
-            buttonStyle={styles.button}
-            onPress={this.navigateToScreen('Last')}/>
-
-        </ScrollView>
+      <View style={{flex: 1}}>
+          <View style={{alignItems: 'center', padding: 10, borderBottomColor: 'grey', borderBottomWidth: 2}}>
+              <Image
+                  style={{width: 128, height:128, borderRadius: 100}}
+                  source={this.state.profilePic ? {uri: this.state.profilePic} : require("../assets/girl.png")}
+              />
+              <Text style={{fontWeight: 'bold', fontSize: 18, marginTop: 10}}>{this.state.name}</Text>
+          </View>
+          <View style={{flex: 1}}>
+              <DrawerItems {...this.props} />
+          </View>
+          <View style={{justifyContent: 'flex-end', backgroundColor: 'red', alignItems: 'center', padding: 10}}>
+              <TouchableHighlight onPress={ async() => (await AsyncStorage.clear(), this.props.navigation.navigate('Auth'))}>
+                  <Text style={{color: 'white', fontWeight: 'bold', fontSize: 15}}>Log Out!</Text>
+              </TouchableHighlight>
+          </View>
       </View>
     );
   }

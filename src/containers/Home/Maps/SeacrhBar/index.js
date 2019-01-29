@@ -26,7 +26,7 @@ class SearchBar extends Component {
                 onPress={() => this.props.setKeyword(this.state.keyword)}>
                 <Icon 
                   name="search"
-                  size={25}/>
+                  size={20}/>
               </TouchableOpacity>
             </View>
         </View>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     },
     searchBar: {
         paddingHorizontal: 20,
-        marginHorizontal: 5,
+        // marginHorizontal: 5,
         flex: 1,
         flexDirection : 'row',
         borderRadius : 25,

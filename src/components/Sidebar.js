@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 class DrawerContent extends Component {
   state = {
-    name: 'Guest',
+    name: 'User01',
     role: 'User01',
     profilePic: '',
     username: 'User01'
@@ -30,7 +30,7 @@ class DrawerContent extends Component {
   render () {
     return (
       <View style={{flex: 1}}>
-          <View style={{alignItems: 'center', padding: 10, borderBottomColor: 'grey', borderBottomWidth: 2}}>
+          <View style={{alignItems: 'center', padding: 10, borderBottomColor: 'lightgrey', borderBottomWidth: 2}}>
               <Image
                   style={{width: 128, height:128, borderRadius: 100}}
                   source={this.state.profilePic ? {uri: this.state.profilePic} : require("../assets/girl.png")}
@@ -40,7 +40,7 @@ class DrawerContent extends Component {
           <View style={{flex: 1}}>
               <DrawerItems {...this.props} />
           </View>
-          <View style={{justifyContent: 'flex-end', backgroundColor: 'red', alignItems: 'center', padding: 10}}>
+          <View style={{justifyContent: 'flex-end', backgroundColor: '#ab1919', alignItems: 'center', padding: 10}}>
               <TouchableHighlight onPress={ async() => (await AsyncStorage.clear(), this.props.navigation.navigate('Auth'))}>
                   <Text style={{color: 'white', fontWeight: 'bold', fontSize: 15}}>Log Out!</Text>
               </TouchableHighlight>

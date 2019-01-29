@@ -1,40 +1,24 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Image, TextInput, FlatList, Dimensions, ScrollView, Switch, TouchableOpacity, Alert } from 'react-native'
-// import { Switch as SecondSwitch } from 'react-native-switch'
+import { AsyncStorage, View, Text, StyleSheet, Image, TextInput, FlatList, Dimensions, ScrollView, Switch, TouchableOpacity, Alert } from 'react-native'
 import { scale } from '../helpers/scaling';
+import axios from 'axios'
 
 class ShopDetail extends Component {
     state = {
+        token: "",
         brandName: "Sate Maranggi Blok M",
         shopStatus: false,
-        listItems: [{
-            name: "Sate Kambing",
-            picture: "../assets/edit.png"
-        }, {
-            name: "Sate Ayam",
-            picture: "../assets/profile.png"
-        }, {
-            name: "Sate Ayam",
-            picture: "../assets/profile.png"
-        }, {
-            name: "Sate Ayam",
-            picture: "../assets/profile.png"
-        }, {
-            name: "Sate Ayam",
-            picture: "../assets/profile.png"
-        }, {
-            name: "Sate Ayam",
-            picture: "../assets/profile.png"
-        }, {
-            name: "Sate Ayam",
-            picture: "../assets/profile.png"
-        }, {
-            name: "Sate Ayam",
-            picture: "../assets/profile.png"
-        }, {
-            name: "Sate Ayam",
-            picture: "../assets/profile.png"
-        }]
+        listItems: [],
+    }
+
+    componentDidMount = async () => {
+        let token = await AsyncStorage.getItem('token')
+        this.setState({
+            token
+        }, () => {
+            console.log("token: ", this.state.token);
+            this.getAllItems()
+        })
     }
 
     handleChange = (name, value) => {
@@ -70,8 +54,43 @@ class ShopDetail extends Component {
         )
     }
 
-    deleteItem = (itemID) => {
-        console.log(itemID, 'sudah terhapus');
+    deleteItem = async (itemID) => {
+        console.log(itemID, 'sudah terhapus'); 
+        let token = await AsyncStorage.getItem('token')
+        // alert(`${itemID}, ${token}`)
+        axios({
+            method: 'DELETE',
+            url: `http://35.243.157.0/items/${itemID}`,
+            headers: {
+                auth: token
+            }
+        })
+        .then( response => {
+            console.log("res: ", response.data);
+            this.getAllItems()
+        })
+        .catch( err => {
+            console.log("error: ",err.responnse);
+        })
+    }
+
+    getAllItems = () => {
+        axios({
+            url: `http://35.243.157.0/items`,
+            method: 'GET',
+            headers: {
+                auth: this.state.token
+            }
+        })
+        .then( response => {
+            console.log(response.data.itemList);
+            this.setState({
+                listItems: response.data.itemList
+            })
+        })
+        .catch( err => {
+            console.log(err.response);
+        })
     }
 
     render() {
@@ -83,7 +102,8 @@ class ShopDetail extends Component {
                             placeholder="Nama Toko"
                             style={styles.inputBrandName}
                             onChangeText={(text) => this.handleChange('brandName', text)}
-                            value={this.state.brandName}
+                            value={this.state.
+                                brandName}
                             underlineColorAndroid="#F0E9E0"
                         />
                     </View>
@@ -99,22 +119,26 @@ class ShopDetail extends Component {
 
                 <ScrollView style={{marginBottom: 50, backgroundColor: 'whitesmoke'}}>
                     <View style={styles.shopStatus}>
-                        {this.state.shopStatus ? 
-                            <Text style={{fontSize: 18}}>Toko Buka</Text> : 
-                            <Text style={{fontSize: 18}}>Toko Tutup</Text>}
-                        <Switch
-                            onValueChange={() => this.toggleShopStatus()}
-                            value={this.state.shopStatus}
-                            trackColor={{false: '#ab1919', true: '#283D85'}}
-                            thumbColor='gray'
-                            style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }], marginTop: 5 }}
-                        />
-                        {/* <SecondSwitch
-                            value={this.state.shopStatus}
-                            onValueChange={() => this.toggleShopStatus()}
-                            activeText={'On'}
-                            inActiveText={'Off'}
-                        /> */}
+                        <View style={{flexDirection: 'row', flex: 1}}>
+                            {this.state.shopStatus ? 
+                                <Text style={{fontSize: 18, marginRight: 15, width: '30%'}}>Toko Buka</Text> : 
+                                <Text style={{fontSize: 18, marginRight: 15, width: '30%'}}>Toko Tutup</Text>}
+                            <Switch
+                                onValueChange={() => this.toggleShopStatus()}
+                                value={this.state.shopStatus}
+                                trackColor={{false: '#ab1919', true: '#283D85'}}
+                                thumbColor='gray'
+                                style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }], marginTop: 5 }}
+                            />
+                        </View>
+                        <TouchableOpacity
+                            // onPress={function untuk add new item}
+                        >
+                            <Image
+                                source={require("../assets/edit.png")}
+                                style={styles.editIcon}
+                            />
+                        </TouchableOpacity>
                     </View>
                     
                     <FlatList
@@ -122,6 +146,7 @@ class ShopDetail extends Component {
                         numColumns={2}
                         style={styles.allItems}
                         data={this.state.listItems}
+                        keyExtractor={item => item._id}
                         renderItem={({item}) => (
                             <View style={styles.eachItem}>
                                 <Image
@@ -129,14 +154,15 @@ class ShopDetail extends Component {
                                     style={styles.itemImage}
                                 />
                                 <Text style={styles.textMenu}>{item.name}</Text>
+                                <Text style={styles.textMenu}>{item.price}</Text>
                                 <View style={styles.menuOptions}>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.setModalVisible(true)}>
                                         <Image
                                             source={require("../assets/editBlue.png")}
                                             style={styles.editIcon}
                                         />
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => this.alertDeleteItem('test')}>
+                                    <TouchableOpacity onPress={() => this.alertDeleteItem(item._id)}>
                                         <Image
                                             source={require("../assets/delete.png")}
                                             style={styles.editIcon}
@@ -179,8 +205,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around'
     },
     shopStatus: {
+        flex: 1,
         alignItems: 'center',
-        marginVertical: 10
+        marginVertical: 10,
+        flexDirection: 'row',
+        paddingHorizontal: 20,
     },
     itemImage: {
         width: 100,
@@ -203,8 +232,8 @@ const styles = StyleSheet.create({
     textMenu: {
         textAlign: 'center', 
         fontSize: 18,
-        paddingTop: 10,
-        paddingBottom: 10,
+        paddingTop: 5,
+        paddingBottom: 5,
     }
 })
 

@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { View, Text,TextInput,TouchableOpacity, StyleSheet} from 'react-native';
 import BurgerMenu from '../../../../components/burgerMenu';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { connect } from 'react-redux';
+//actions
+import { Search } from '../../../../actions/home';
 class SearchBar extends Component {
     state = {
         keyword : ''
@@ -19,7 +22,8 @@ class SearchBar extends Component {
                     onChangeText={(text) => this.setState({keyword : text})} />
               </View>
               <TouchableOpacity
-                style={styles.searchButton}>
+                style={styles.searchButton}
+                onPress={() => this.props.setKeyword(this.state.keyword)}>
                 <Icon 
                   name="search"
                   size={25}/>
@@ -55,4 +59,10 @@ const styles = StyleSheet.create({
         backgroundColor : 'white',
     },
 })
-export default SearchBar;
+
+const mapDispatchtoProps = dispatch => {
+    return {
+        setKeyword : (keyword) => dispatch(Search(keyword))  
+    }
+}
+export default connect(null, mapDispatchtoProps)(SearchBar);

@@ -20,15 +20,20 @@ class ListPedagang extends Component {
             }
         })
 
-        if ( sortingData.length !== 0 ){
-            let data = sortingData.sort((a, b) => a.distance - b.distance)
-            this.setState({
-                ListPedagang : data
-            })
-        }
+        let data = sortingData.sort((a, b) => a.distance - b.distance)
+        this.setState({
+            ListPedagang : data
+        }, ()=>{
+            console.log('ini adalah list pedagang :', this.state )
+        })
+        
     }
+    componentDidMount(){
+        this.sortingNearest()
+    }
+
     componentDidUpdate(prevProps){
-        if(prevProps.userPosition.latitude !== this.props.userPosition.latitude){
+        if(prevProps.userPosition.latitude !== this.props.userPosition.latitude || prevProps.userPosition.longitude !== this.props.userPosition.longitude || this.props.allUsers.length !== prevProps.allUsers.length){
             this.sortingNearest()
         }
     }

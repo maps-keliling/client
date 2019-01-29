@@ -155,23 +155,6 @@ class App extends Component{
   render() {
     return (
       <View style={styles.container}>
-         <View style={styles.topMenu}>
-            <BurgerMenu {...this.props}/>
-            <View style={styles.searchBar}>
-              <View>
-                <TextInput 
-                    placeholder="cari makanan favorite anda.."
-                    value={this.state.keyword}
-                    onChangeText={(text) => this.setState({keyword : text})} />
-              </View>
-              <TouchableOpacity
-                style={styles.searchButton}>
-                <Icon 
-                  name="search"
-                  size={25}/>
-              </TouchableOpacity>
-            </View>
-        </View>
         <MapView 
           ref={map => {this.map = map}}
           provider={PROVIDER_GOOGLE} // remove if not using Google Maps
@@ -205,12 +188,25 @@ class App extends Component{
             strokeWidth={2}
             strokeColor="red"/>
         </MapView>
+        <SearchBar {...this.props}/>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+    width: '100%',
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+  map: {
+    ...StyleSheet.absoluteFill,
+    flex : 1,
+    width : '100%', 
+    height : '100%',
+  },
   topMenu : {
     position : 'absolute',
     zIndex: 5,
@@ -221,31 +217,11 @@ const styles = StyleSheet.create({
     alignItems : 'center',
     justifyContent : 'space-around',
     padding : 0,
-},
-searchButton: {
+  },
+  searchButton: {
     flex: 1, 
     justifyContent: 'center', 
     alignItems: 'flex-end'
-},
-searchBar: {
-    paddingHorizontal: 20,
-    marginHorizontal: 5,
-    flex: 1,
-    flexDirection : 'row',
-    borderRadius : 25,
-    backgroundColor : 'white',
-},
-  container: {
-    height: '100%',
-    width: '100%',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  map: {
-    ...StyleSheet.absoluteFill,
-    flex : 1,
-    width : '100%', 
-    height : '100%',
   },
   menu: {
     marginHorizontal: 10,
@@ -255,6 +231,14 @@ searchBar: {
   menuIcon: {
     width: 50,
     height: 50
+  },
+  searchBar: {
+    paddingHorizontal: 20,
+    marginHorizontal: 5,
+    flex: 1,
+    flexDirection : 'row',
+    borderRadius : 25,
+    backgroundColor : 'white',
   },
   inputLocation : {
     width : '100%',

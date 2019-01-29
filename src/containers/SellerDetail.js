@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { View, Text, Image, FlatList, ScrollView, TouchableOpacity, Linking } from 'react-native'
+import { View, Text, Image, FlatList, ScrollView, TouchableOpacity, Linking, AsyncStorage } from 'react-native'
 import axios from 'axios';
-import { AsyncStorage } from 'react-native';
+import firebase from 'react-native-firebase'
 
 class SellerDetail extends Component {
     state = {
@@ -48,6 +48,62 @@ class SellerDetail extends Component {
         Linking.openURL('tel:0816297325').catch((err) => console.error('An error occurred', err));
     }
 
+    chatSeller = async () => {
+        // console.log()
+        const { navigation } = this.props
+        const newIdChat = firebase.database().ref('chat').push().key
+        const newIdMessage = firebase.database().ref('message').push().key
+        let sellerId = this.props.navigation.getParam('id')
+        const myId  = await AsyncStorage.getItem('_id')
+        const myName  = await AsyncStorage.getItem('name')
+        const chatRoomId = `${myId}-${sellerId}`
+        console.log(sellerId, 'ini seller id')
+        console.log(myId, 'ini my id')
+        console.log(newIdChat, 'new id chat')
+        console.log(newIdMessage, 'new id message')
+        firebase.database().ref('chat').child(chatRoomId).once('value', (snapshot) => {
+            console.log(snapshot.val())
+            if (snapshot.val()) {
+                console.log('sudah ada chat history ...')
+                navigation.navigate('ChatDetail', {
+                    chatKey: snapshot.val().messageId,
+                    sellerName: this.state.name
+                })
+            } else {
+                firebase.database().ref('chat').child(chatRoomId).set({
+                    messageId: newIdChat
+                })
+                .then(() => {
+                    return firebase.database().ref('message').child(newIdChat).set({
+                        seller: {
+                            id: sellerId,
+                            name: this.state.name
+                        },
+                        buyer: {
+                            id: myId,
+                            name: myName
+                        },
+                        allChat: {
+                            [newIdMessage]: {
+                                createdAt: Date.now(),
+                                idUser: myId,
+                                message: '',
+                                name: myName
+                            }
+                        }
+                    })
+                })
+                .then(() => {
+                    navigation.navigate('ChatDetail', {
+                        chatKey: newIdChat,
+                        sellerName: this.state.name
+                    })
+                })
+            }
+        })
+
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -78,7 +134,7 @@ class SellerDetail extends Component {
                     </ScrollView>
                 </View>
                 <View style={styles.bottomMenu}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate("ChatRoom")}>
+                    <TouchableOpacity onPress={this.chatSeller}>
                         <Image
                             source={require("../assets/chat.png")}
                             style={styles.menuIcon}

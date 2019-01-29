@@ -10,7 +10,9 @@ import SellerDetail from '../containers/SellerDetail';
 import SideBar from '../components/Sidebar'
 const DrawerNavigator = createDrawerNavigator(
     {      
-        // MapScreen,
+        MapScreen: Home,
+        SellerDetail,
+        ChatDetail,
         ChatScreen : createStackNavigator({
             ChatScreen: ChatScreen,
             ChatDetail: ChatDetail

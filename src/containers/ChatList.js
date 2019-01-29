@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, AsyncStorage } from 'react-native'
 import BurgerMenu from '../components/burgerMenu'
+import firebase from 'react-native-firebase'
 
 class ChatList extends Component {
     state = {
@@ -53,6 +54,11 @@ class ChatList extends Component {
             name: "Tukul",
             lastChat: "Halo kak, pesanannya sudah sesuai aplikasi ?"
         }]
+    }
+
+    componentDidMount = async () => {
+        const myId = await AsyncStorage.getItem('_id')
+        console.log(myId, 'ini id sayay')
     }
 
     render() {

@@ -1,14 +1,3 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
-
-class AddItem extends Component {
-    render() {
-        return (
-            <View>
-                <Text>Ini AddItem</Text>
-            </View>
-        )
-    }
-}
-
-export default AddItem
+import { View, Text, Button, StyleSheet, ScrollView, Dimensions, TextInput } from 'react-native'
+import Modal from 'react-native-modalbox'

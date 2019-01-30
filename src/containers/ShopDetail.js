@@ -38,7 +38,8 @@ class ShopDetail extends Component {
         loading: false,
         uriImage: {},
         uploadImageResponse: {},
-        loading: false
+        loading: false,
+        urlImageUpdated : ''
     }
 
     componentDidMount =  async () => {
@@ -248,7 +249,7 @@ class ShopDetail extends Component {
             loading: true
         }, () => {
             let formData = new FormData()
-            formData.append('file', this.state.uriImage)
+            formData.append('file', this.state.urlImageUpdated)
             formData.append('name', this.state.inputEditFood)
             formData.append('price', this.state.inputEditPrice)
 
@@ -259,6 +260,7 @@ class ShopDetail extends Component {
                 }
             })
             .then( (response) => {
+                // alert(JSON.stringify(response, 'hahah'))
                 this.getAllItems()
                 this.setState({
                     editModalIsOpen: false,
@@ -270,6 +272,7 @@ class ShopDetail extends Component {
                 });
             })
             .catch( error => {
+                // alert('errrr', JSON.stringify(error))
                 this.setState({
                     inputEditFood: "",
                     inputEditPrice: "",
@@ -355,7 +358,7 @@ class ShopDetail extends Component {
                             </View>
 
                             {this.state.loading && 
-                                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                <View style={{justifyContent: 'center', alignItems: 'center'}}>
                                     <ActivityIndicator style={{margin: 10}} size="small" color="#ab1919" />
                                 </View>
                             }
@@ -391,7 +394,7 @@ class ShopDetail extends Component {
 
                             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                                 <Image 
-                                    source={ this.state.uploadImageResponse.data ? {uri: "data:image/jpeg;base64," + this.state.uploadImageResponse.data} : require('../assets/camera.png')}
+                                    source={{ uri : this.state.urlImageUpdated}}
                                     style={{width: 100, height: 100}}
                                 />
                                 <TouchableOpacity onPress={() => this.pickImage()} onLongPress={false}>
@@ -443,9 +446,9 @@ class ShopDetail extends Component {
                                             inputEditFood: item.name,
                                             inputEditPrice: item.price,
                                             currentEditID: item._id,
-                                            uploadImageResponse: {}, 
+                                            urlImageUpdated: item.picture, 
                                             uriImage: {}
-                                    })}>
+                                    }, ()=> console.log('Ini Adalah url updated :', this.state.urlImageUpdated))}>
                                         <Image
                                             source={require("../assets/editBlue.png")}
                                             style={styles.editIcon}

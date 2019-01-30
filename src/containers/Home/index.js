@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, AsyncStorage } from 'react-native';
 import MapsView from './Maps/index';
 import ListPedagang from './ListPedagang/index';
 import { DrawerActions } from 'react-navigation';
@@ -9,8 +9,16 @@ import firebase from 'react-native-firebase';
 import { ReadData } from '../../actions/home';
 
 class Home extends Component {
-
-    componentDidMount(){
+    state = {
+        role : 'seller'
+    }
+    async componentDidMount(){
+        let role = await AsyncStorage.getItem('role')
+        if(role !== 'seller'){
+            this.setState({
+                role : 'buyer'
+            })
+        }
         this.props.readDataSeller()
     }
 
@@ -24,9 +32,14 @@ class Home extends Component {
                 <View style={styles.maps}>
                     <MapsView {...this.props}/>
                 </View>
+                {
+                    this.state.role !== 'seller' ?
                 <View style={styles.listPedagang}>
                    <ListPedagang {...this.props}/>
                 </View>
+                    :
+                null
+                }
             </View>
         )
     }

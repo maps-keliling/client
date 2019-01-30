@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import haversine from 'haversine';
 class ListPedagang extends Component {
     state = {
-        ListPedagang : []
+        ListPedagang : [],
+        role : 'seller'
     }
 
     sortingNearest = () => {
@@ -45,7 +46,8 @@ class ListPedagang extends Component {
                     <ActivityIndicator style={{alignSelf : 'center'}} size="large" color="#00ff00" />
                 )  
                 :
-                (<ScrollView style={styles.container}>
+                (
+                <ScrollView style={styles.container}>
                     {  
                         this.state.ListPedagang.length !== 0 ? 
                         this.state.ListPedagang.map((pedagang, index) => {
@@ -64,7 +66,8 @@ class ListPedagang extends Component {
                         </View>
 
                     }
-                </ScrollView>)
+                </ScrollView>
+                )
             }
             </>
             

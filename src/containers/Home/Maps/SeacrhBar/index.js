@@ -7,28 +7,41 @@ import { connect } from 'react-redux';
 import { Search } from '../../../../actions/home';
 class SearchBar extends Component {
     state = {
-        keyword : ''
+        keyword : '',
+        role : 'seller'
     }
-
+    async componentDidMount(){
+        let role = await AsyncStorage.getItem(role)
+        this.setState({
+          role : role
+        })
+    }
     render(){
+        let styleTopMenu = styles.topMenu
+        if (this.state.role === 'seller'){
+            styleTopMenu = styles.topMenuSeller
+        }
         return (
-        <View style={styles.topMenu}>
+        <View style={styleTopMenu}>
             <BurgerMenu {...this.props}/>
-            <View style={styles.searchBar}>
-              <View>
-                <TextInput 
-                    placeholder="cari makanan favorite anda.."
-                    value={this.state.keyword}
-                    onChangeText={(text) => this.setState({keyword : text})} />
-              </View>
-              <TouchableOpacity
-                style={styles.searchButton}
-                onPress={() => this.props.setKeyword(this.state.keyword)}>
-                <Icon 
-                  name="search"
-                  size={20}/>
-              </TouchableOpacity>
-            </View>
+            {   this.state.role === 'buyer' ? 
+                <View style={styles.searchBar}>
+                <View>
+                    <TextInput 
+                        placeholder="cari makanan favorite anda.."
+                        value={this.state.keyword}
+                        onChangeText={(text) => this.setState({keyword : text})} />
+                </View>
+                <TouchableOpacity
+                    style={styles.searchButton}
+                    onPress={() => this.props.setKeyword(this.state.keyword)}>
+                    <Icon 
+                    name="search"
+                    size={20}/>
+                </TouchableOpacity>
+                </View> :
+                null
+            }
         </View>
         )
     }
@@ -43,6 +56,17 @@ const styles = StyleSheet.create({
         flexDirection : 'row',
         alignItems : 'center',
         justifyContent : 'space-around',
+        padding : 0,
+    },
+    topMenuSeller : {
+        position : 'absolute',
+        zIndex: 5,
+        height : 50,
+        width:'90%',
+        top : 20,
+        flexDirection : 'row',
+        alignItems : 'center',
+        justifyContent : 'flex-start',
         padding : 0,
     },
     searchButton: {

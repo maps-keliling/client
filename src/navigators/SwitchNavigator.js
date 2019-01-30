@@ -8,7 +8,6 @@ import SellerDrawerNavigator from './SellerDrawerNavigator';
 
 const AppSwitchNavigator = createSwitchNavigator({
     AuthLoading: AuthLoadingScreen,
-    // App: AppStack,
     Auth: Login,
     Register: Register,
     App: { screen: AppDrawerNavigator },

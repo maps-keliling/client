@@ -41,7 +41,6 @@ class ShopDetail extends Component {
     }
 
     componentDidMount =  async () => {
-        // this.getAllItems()
         let {id, name, username, role, profilePic, token } = await this.getDataLocalStorage()
         this.setState({
             id,
@@ -198,7 +197,6 @@ class ShopDetail extends Component {
         })
     }
 
-
     addFood = () => {
         this.setState({
             loading: true
@@ -271,6 +269,15 @@ class ShopDetail extends Component {
             })
         })
     }
+
+    formatRupiah = (number) => {
+        var splitNum;
+        number = Math.abs(number);
+        number = number.toFixed(0);
+        splitNum = number.split('.');
+        splitNum[0] = splitNum[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return 'Rp. ' + splitNum.join(".");
+    }
     
 
 
@@ -278,18 +285,16 @@ class ShopDetail extends Component {
         return (
             <View>
                 <BurgerMenu style={styles.burgerMenu} {...this.props}></BurgerMenu>
-                <View style={styles.editBrand}>
-                    <View style={styles.inputBrandName}>
-                        <Text style={styles.titleText}>{this.state.brandName}</Text>
-                    </View>
+                <View style={styles.topMenu}>
+                    <Text style={styles.title}>{this.state.brandName}</Text>
                 </View>
 
                 <ScrollView style={{marginBottom: 50, backgroundColor: 'whitesmoke'}}>
                     <View style={styles.shopStatus}>
                         <View style={{flexDirection: 'row', flex: 1}}>
                             {this.state.shopStatus ? 
-                                <Text style={{fontSize: 18, marginRight: 15, width: '30%'}}>Toko Buka</Text> : 
-                                <Text style={{fontSize: 18, marginRight: 15, width: '30%'}}>Toko Tutup</Text>}
+                                <Text style={{fontSize: 18, marginRight: 10, width: '40%'}}>Toko Buka</Text> : 
+                                <Text style={{fontSize: 18, marginRight: 10, width: '40%'}}>Toko Tutup</Text>}
                             <Switch
                                 onValueChange={() => this.toggleShopStatus()}
                                 value={this.state.shopStatus}
@@ -346,7 +351,6 @@ class ShopDetail extends Component {
                         </View>
                     </Modal>
 
-
                     {/* Modal Edit Item */}
                     <Modal isOpen={this.state.editModalIsOpen} onClosed={() => this.setState({editModalIsOpen: false})} coverScreen={true} style={styles.modal} position={"center"}>
                         <Text style={styles.titleText}>Ubah Menu</Text>
@@ -397,14 +401,21 @@ class ShopDetail extends Component {
                         keyExtractor={item => item._id}
                         renderItem={({item}) => (
                             <View style={styles.eachItem}>
-                                <Image
+                                {item.picture 
+                                ? <Image
                                     source={{uri: item.picture}}
                                     // source={require("../assets/food.png")}
                                     style={styles.itemImage}
-                                />
+                                    /> 
+                                : <Image
+                                    // source={{uri: item.picture}}
+                                    source={require("../assets/food.png")}
+                                    style={styles.itemImage}
+                                    />
+                                }
                                 <View style={{flex: 1, justifyContent: 'space-between'}}>
                                     <Text style={styles.textMenu}>{item.name}</Text>
-                                    <Text style={styles.textMenu}>{item.price}</Text>
+                                    <Text style={styles.textMenu}>{this.formatRupiah(item.price)}</Text>
                                 </View>
                                 <View style={styles.menuOptions}>
                                     <TouchableOpacity onPress={() => this.setState(
@@ -439,6 +450,20 @@ class ShopDetail extends Component {
 
 
 const styles = StyleSheet.create({
+    topMenu: {
+        height: 60,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    allItems: {
+        marginBottom: 20,
+    },
+    title: {
+        fontSize: 18,
+        width: '80%',
+        textAlign: 'center',
+        alignSelf: 'flex-end',
+    },
     titleText: {
         fontSize: 24,
         fontWeight: 'bold',

@@ -138,14 +138,15 @@ class ChatList extends Component {
         const { role } = this.state
         // console.log(this.state.myChat, 'my chat history')
         return (
-            <View>
+            <View style={{flex: 1}}>
                 <BurgerMenu style={styles.burgerMenu} {...this.props}></BurgerMenu>
                 <View style={styles.topMenu}>
                     <Text style={styles.title}>Chat</Text>
                 </View>
+                {this.state.myChat.length 
+                ?
                 <FlatList
                     data={this.state.myChat}
-                    // extraData={this.state.bool}
                     renderItem={({item}) => (
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('ChatDetail', {
@@ -185,6 +186,11 @@ class ChatList extends Component {
                         </TouchableOpacity>
                     )}
                 />
+                :
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{fontSize: 20}}>Tidak ada history chat</Text>
+                </View>
+                }
             </View>
         )
     }

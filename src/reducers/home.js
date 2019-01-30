@@ -3,8 +3,8 @@ const initialState = {
     allUsers : [],
     keyword : '',
     userPosition : {
-        latitude: -6.265299,
-        longitude: 106.782836
+        latitude: -6.260785, 
+        longitude: 106.781675,
     },
     loading : false
 }

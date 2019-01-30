@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, AsyncStorage } from 'react-native'
 import firebase from 'react-native-firebase'
 import { GiftedChat } from 'react-native-gifted-chat'
-
+let firebaseVar
 export default class ChatDetail extends Component {
 
   state = {
@@ -14,13 +14,18 @@ export default class ChatDetail extends Component {
     myName: ''
   }
 
+  componentWillUnmount = () => {
+    firebaseVar.off()
+  }
+
   componentDidMount = async () => {
     const { navigation } = this.props
     const chatkey = navigation.getParam('chatKey', '')
     const myId = await AsyncStorage.getItem('_id')
     const myName = await AsyncStorage.getItem('name')
     console.log(chatkey)
-    firebase.database().ref('message').child(chatkey).on('value', (snapshot) => {
+    firebaseVar = firebase.database().ref('message').child(chatkey)
+    firebaseVar.on('value', (snapshot) => {
       console.log(snapshot.val(), 'ini dari chat detail')
       const ArrayOfChat = Object.entries(snapshot.val().allChat).map(item => {
         const myItem = {

@@ -14,6 +14,10 @@ class Home extends Component {
         this.props.readDataSeller()
     }
 
+    componentWillUnmount = () => {
+        firebase.database().ref('/seller').off()
+    }
+
     render(){
         return (
             <View style={styles.container}>

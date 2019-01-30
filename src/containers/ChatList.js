@@ -80,6 +80,7 @@ class ChatList extends Component {
                 const ArrayOfChat = Object.entries(snapshot.val()).map(item => ({...item[1], key: item[0]}));
                 // console.log(snapshot.val(), 'ini dari message')
                 const chatFiltered = ArrayOfChat.filter(eachChat => {
+                    // console.log(eachChat, 'ini eachChat')
                     for (let i = 0; i < keyMessage.length; i++) {
                         if (eachChat.key === keyMessage[i]) {
                             return eachChat
@@ -87,6 +88,7 @@ class ChatList extends Component {
                     }
                 })
                 console.log(chatFiltered, 'ini chat filtered')
+                // console.log(chatFiltered.allChat, 'ini all chat nya')
                 this.setState({
                     myChat: chatFiltered,
                     role: role
@@ -97,6 +99,7 @@ class ChatList extends Component {
 
     render() {
         const { role } = this.state
+        // console.log(this.state.myChat, 'my chat history')
         return (
             <View>
                 <BurgerMenu style={styles.burgerMenu} {...this.props}></BurgerMenu>
@@ -131,7 +134,9 @@ class ChatList extends Component {
                     data={this.state.myChat}
                     renderItem={({item}) => (
                         <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('ChatRoom')}
+                            onPress={() => this.props.navigation.navigate('ChatDetail', {
+                                chatKey: item.key,
+                            })}
                             style={styles.eachChat}
                         >   
                             <Image
@@ -139,6 +144,9 @@ class ChatList extends Component {
                                 style={styles.profilePicture}
                             />
                             <View style={styles.chatInfo}>
+                                {/* <Text>
+                                    {JSON.stringify(item)}
+                                </Text> */}
                                 <Text style={styles.name}>{role === 'buyer' ? item.seller.name : item.buyer.name}</Text>
                                 {/* <Text style={styles.name}>{item.name}</Text>
                                 {item.lastChat.length > 25 ? 

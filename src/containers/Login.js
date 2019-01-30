@@ -30,45 +30,51 @@ class Login extends Component {
     }
 
     login = () => {
-        axios({
-            url: "http://35.243.157.0/login",
-            method: "POST",
-            data: {
-                username: this.state.username,
-                password: this.state.password
-            }
-        })
-        .then( async response => {
-            this.inputUsername.clear()
-            this.inputPassword.clear()
-
-            const {name, profilePic, token, role, username, _id } = response.data
-            const defaultAvatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWROaDgBF1b0LxeIqtVE9C-XbBoGBonouTumjSCtFQB5Hn4BcY'
-            await AsyncStorage.setItem('id', _id);
-            await AsyncStorage.setItem('_id', _id);
-            await AsyncStorage.setItem('token', token);
-            await AsyncStorage.setItem('role', role);
-            await AsyncStorage.setItem('name', name);
-            await AsyncStorage.setItem('profilePic', profilePic || defaultAvatar);
-            await AsyncStorage.setItem('username', username);
-            await AsyncStorage.setItem('_id', _id);
-
-            if (role === "seller") {    
-                this.props.navigation.navigate('AppSeller')
-            } else if (role === "buyer") {
-                this.props.navigation.navigate('App')
-            }else{
-                console.log('Masuk ke Else!')
-            }
-            console.log('Finish!')
-        })
-        .catch( err => {
-            this.inputPassword.clear()
-
-            console.log("error: ", err.response);
-            this.setState({
-                error: err.response.data.message
+        this.setState({
+            loading: true
+        }, () => {
+            axios({
+                url: "http://35.243.157.0/login",
+                method: "POST",
+                data: {
+                    username: this.state.username,
+                    password: this.state.password
+                }
             })
+            .then( async response => {
+                this.setState({
+                    loading: false
+                })
+                this.inputUsername.clear()
+                this.inputPassword.clear()
+    
+                const {name, profilePic, token, role, username, _id } = response.data
+                const defaultAvatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWROaDgBF1b0LxeIqtVE9C-XbBoGBonouTumjSCtFQB5Hn4BcY'
+                await AsyncStorage.setItem('id', _id);
+                await AsyncStorage.setItem('_id', _id);
+                await AsyncStorage.setItem('token', token);
+                await AsyncStorage.setItem('role', role);
+                await AsyncStorage.setItem('name', name);
+                await AsyncStorage.setItem('profilePic', profilePic || defaultAvatar);
+                await AsyncStorage.setItem('username', username);
+                await AsyncStorage.setItem('_id', _id);
+    
+                if (role === "seller") {    
+                    this.props.navigation.navigate('AppSeller')
+                } else if (role === "buyer") {
+                    this.props.navigation.navigate('App')
+                }else{
+                    console.log('Masuk ke Else!')
+                }
+                console.log('Finish!')
+            })
+            .catch( err => {
+                this.setState({
+                    loading: false
+                })
+                this.inputPassword.clear()
+            })
+
         })
     }
 
@@ -103,7 +109,7 @@ class Login extends Component {
                     onChangeText={(text) => this.handleChange('password', text)}
                     underlineColorAndroid="#F0E9E0"
                 ></TextInput>
-                {this.state.loading && <ActivityIndicator style={{margin: 10}} size="small" color="#ab1919" />}
+                {this.state.loading && <ActivityIndicator style={{margin: 5}} size="large" color="#ab1919" />}
                 <Text style={styles.textError}>{this.state.error}</Text>
                 <View style={styles.buttonContainer}>
                     <Button 

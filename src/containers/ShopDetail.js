@@ -37,7 +37,8 @@ class ShopDetail extends Component {
         currentEditID: "",
         loading: false,
         uriImage: {},
-        uploadImageResponse: {}
+        uploadImageResponse: {},
+        loading: false
     }
 
     componentDidMount =  async () => {
@@ -152,22 +153,31 @@ class ShopDetail extends Component {
     }
 
     getAllItems = () => {
-        axios({
-            url: `http://35.243.157.0/users/${this.state.id}`,
-            method: 'GET',
-            headers: {
-                auth: this.state.token
-            }
-        })
-        .then( response => {
-            console.log(response)
-            this.setState({
-                listItems: response.data.shopId.itemList,
-                brandName: response.data.shopId.brand
+        this.setState({
+            loading: true
+        }, () => {
+            axios({
+                url: `http://35.243.157.0/users/${this.state.id}`,
+                method: 'GET',
+                headers: {
+                    auth: this.state.token
+                }
             })
-        })
-        .catch( err => {
-            console.log(err.response);
+            .then( response => {
+                console.log(response)
+                this.setState({
+                    listItems: response.data.shopId.itemList,
+                    brandName: response.data.shopId.brand,
+                    loading: false
+                })
+            })
+            .catch( err => {
+                this.setState({
+                    loading: false
+                })
+                console.log(err.response);
+            })
+
         })
     }
 
@@ -344,7 +354,11 @@ class ShopDetail extends Component {
                                 </TouchableOpacity>
                             </View>
 
-                            {this.state.loading && <ActivityIndicator style={{margin: 10}} size="small" color="#ab1919" />}
+                            {this.state.loading && 
+                                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                    <ActivityIndicator style={{margin: 10}} size="small" color="#ab1919" />
+                                </View>
+                            }
                             <TouchableOpacity onPress={() => this.addFood()} onLongPress={false} style={{borderColor: "#ab1919", borderWidth: 1, borderRadius: 25, paddingVertical: 10, marginVertical: 10 }}>
                                 <Text style={{ fontSize: 18, color: "#ab1919", textAlign: "center"}}>Tambah Baru</Text>
                             </TouchableOpacity>
@@ -392,7 +406,12 @@ class ShopDetail extends Component {
                         </View>
                     </Modal>
                 
-                    
+                    {this.state.loading && 
+                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                            <ActivityIndicator style={{margin: 5}} size="large" color="#ab1919" />
+                        </View>
+                    }
+
                     <FlatList
                         horizontal={false}
                         numColumns={2}
@@ -482,7 +501,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 50,
+        height: 60,
     },
     burgerMenu: {
         top: 5,

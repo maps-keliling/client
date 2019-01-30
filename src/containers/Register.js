@@ -1,5 +1,5 @@
 import React, { Component} from 'react'
-import { StyleSheet, View, Text, Dimensions, ScrollView, Image, TextInput, Button, Picker, TouchableOpacity } from 'react-native'
+import { StyleSheet, ActivityIndicator, View, Text, Dimensions, ScrollView, Image, TextInput, Button, Picker, TouchableOpacity } from 'react-native'
 import axios from 'axios'
 
 class Register extends Component {
@@ -11,49 +11,61 @@ class Register extends Component {
         password: "",
         role: "seller", 
         errors: [],
-        shopName: "" // BELUM MASUK AXIOS YAA
+        shopName: "", 
+        loading: false
     }
 
     register = () => {
-        console.log(this.state);
-        axios({
-            url: "http://35.243.157.0/register",
-            method: "POST",
-            data: {
-                name: this.state.name,
-                username: this.state.username,
-                phone: this.state.phone,
-                address: this.state.address,
-                password: this.state.password,
-                role: this.state.role
-            }
-        })
-        .then( response => {
-            this.inputName.clear()
-            this.inputUsername.clear()
-            this.inputPhone.clear()
-            this.inputAddress.clear()
-            this.inputPassword.clear()
-            console.log("register success, response: ", response.data);
-            this.setState({
-                name: "", username: "", phone: "", address: "", password: "", role: "", errors: []
-            }, () => {
-                this.props.navigation.navigate('Auth', {
-                    message: "Anda sudah terdaftar. Silahkan masuk untuk melanjutkan"
+        // console.log(this.state);
+        this.setState({
+            loading: true
+        }, () => {
+            axios({
+                url: "http://35.243.157.0/register",
+                method: "POST",
+                data: {
+                    name: this.state.name,
+                    username: this.state.username,
+                    phone: this.state.phone,
+                    address: this.state.address,
+                    password: this.state.password,
+                    role: this.state.role,
+                    brand: this.state.shopName
+                }
+            })
+            .then( response => {
+                this.inputName.clear()
+                this.inputUsername.clear()
+                this.inputPhone.clear()
+                this.inputAddress.clear()
+                this.inputPassword.clear()
+                this.inputShopName.clear()
+                // console.log("register success, response: ", response.data);
+                this.setState({
+                    name: "", username: "", phone: "", address: "", password: "", role: "", errors: [], loading: false
+                }, () => {
+                    this.props.navigation.navigate('Auth', {
+                        message: "Anda sudah terdaftar. Silahkan masuk untuk melanjutkan"
+                    }) 
                 }) 
-            }) 
-        })
-        .catch( err => {
-            let errors = Object.values(err.response.data)
-            let errorMessages = errors.map((errors) => {
-                return errors.message
             })
-            console.log("error: ",  errorMessages);
-            this.setState({
-                errors: errorMessages
-            }, () => {
-                console.log("stateee: ", this.state);
+            .catch( err => {
+                this.setState({
+                    loading: false
+                })
+                let errors = Object.values(err.response.data)
+                let errorMessages = errors.map((errors) => {
+                    return errors.message
+                })
+                console.log("error: ",  errorMessages);
+                this.setState({
+                    errors: errorMessages
+                }, () => {
+                    console.log("stateee: ", this.state);
+                })
             })
+
+
         })
     }   
 
@@ -124,7 +136,7 @@ class Register extends Component {
                         style={styles.inputNumber}
                         placeholder="Nama Toko"
                         underlineColorAndroid="#F0E9E0"
-                        ref={input => { this.inputPassword = input }}
+                        ref={input => { this.inputShopName = input }}
                         onChangeText={(text) => this.handleChange('shopName', text)}
                     ></TextInput>
                 }
@@ -137,6 +149,7 @@ class Register extends Component {
                         )}
                     </View>
                 }
+                {this.state.loading && <ActivityIndicator style={{margin: 5}} size="large" color="#ab1919" />}
                 <View style={styles.buttonContainer}>
                     <Button
                         title="Daftar" 

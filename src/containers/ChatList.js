@@ -1,62 +1,14 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, AsyncStorage } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, AsyncStorage, ActivityIndicator } from 'react-native'
 import BurgerMenu from '../components/burgerMenu'
 import firebase from 'react-native-firebase'
 
 class ChatList extends Component {
     state = {
-        chatList: [{
-            picture: "",
-            name: "Budi",
-            lastChat: "Halo mbak, mau pesan apa hari ini?"
-        }, {
-            picture: "",
-            name: "Joko",
-            lastChat: "Mau beli"
-        }, {
-            picture: "",
-            name: "Tukul",
-            lastChat: "Halo kak, pesanannya sudah sesuai aplikasi ?"
-        }, {
-            picture: "",
-            name: "Budi",
-            lastChat: "Halo mbak, mau pesan apa hari ini?"
-        }, {
-            picture: "",
-            name: "Joko",
-            lastChat: "Mau beli"
-        }, {
-            picture: "",
-            name: "Tukul",
-            lastChat: "Halo kak, pesanannya sudah sesuai aplikasi ?"
-        }, {
-            picture: "",
-            name: "Budi",
-            lastChat: "Halo mbak, mau pesan apa hari ini?"
-        }, {
-            picture: "",
-            name: "Joko",
-            lastChat: "Mau beli"
-        }, {
-            picture: "",
-            name: "Tukul",
-            lastChat: "Halo kak, pesanannya sudah sesuai aplikasi ?"
-        }, {
-            picture: "",
-            name: "Budi",
-            lastChat: "Halo mbak, mau pesan apa hari ini?"
-        }, {
-            picture: "",
-            name: "Joko",
-            lastChat: "Mau beli"
-        }, {
-            picture: "",
-            name: "Tukul",
-            lastChat: "Halo kak, pesanannya sudah sesuai aplikasi ?"
-        }],
         myChat: [],
         role: '',
         bool: false,
+        loading: false
     }
 
     componentWillUnmount = () => {
@@ -65,6 +17,7 @@ class ChatList extends Component {
     }
 
     componentDidMount = async () => {
+        await this.setState({loading: true})
         const myId = await AsyncStorage.getItem('_id')
         const role = await AsyncStorage.getItem('role')
         // console.log(myId, 'ini id sayay')
@@ -127,6 +80,7 @@ class ChatList extends Component {
                 // console.log(chatFiltered.allChat, 'ini all chat nya')
                 this.setState({
                     myChat: chatChanged,
+                    loading: false,
                     role: role,
                     bool: !this.state.bool
                 })
@@ -143,8 +97,13 @@ class ChatList extends Component {
                 <View style={styles.topMenu}>
                     <Text style={styles.title}>Chat</Text>
                 </View>
-                {this.state.myChat.length 
-                ?
+
+                {this.state.loading && 
+                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                        <ActivityIndicator size="large" color="#ab1919" />
+                    </View>
+                }
+
                 <FlatList
                     data={this.state.myChat}
                     renderItem={({item}) => (

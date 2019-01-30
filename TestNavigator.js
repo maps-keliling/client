@@ -1,13 +1,13 @@
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
-import Login from '../containers/Login'
-import Register from '../containers/Register'
-import Home from '../containers/Home/index';
-import ChatList from '../containers/ChatList'
-import ChatRoom from '../containers/ChatRoom'
-import SellerDetail from '../containers/SellerDetail'
-import ShopDetail from '../containers/ShopDetail'
-import AddItem from '../containers/AddItem'
-import Route from '../containers/RouteArah/index';
+import Login from './src/containers/Login'
+import Register from './src/containers/Register'
+import Home from './src/containers/Home/index';
+import ChatList from './src/containers/ChatList'
+import ChatRoom from './src/containers/ChatRoom'
+import SellerDetail from './src/containers/SellerDetail'
+import ShopDetail from './src/containers/ShopDetail'
+import AddItem from './src/containers/AddItem'
+import Route from './src/containers/RouteArah/index';
 
 const AppNavigator = createBottomTabNavigator({
     Login: {

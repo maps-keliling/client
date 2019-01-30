@@ -153,10 +153,24 @@ class ChatList extends Component {
                             })}
                             style={styles.eachChat}
                         >   
+                            
+                            {role === 'buyer' ? item.seller.profilePic ? 
                             <Image
-                                source={require('../assets/profile.png')}
-                                style={styles.profilePicture}
-                            />
+                            source={{uri: item.seller.profilePic}}
+                            style={styles.profilePicture} />  
+                            : 
+                                <Image
+                                    source={require('../assets/profile.png')}
+                                    style={styles.profilePicture} /> 
+                            : 
+                            item.buyer.profilePic ? 
+                            <Image
+                            source={{uri: item.buyer.profilePic}}
+                            style={styles.profilePicture} />   : 
+                            <Image
+                                    source={require('../assets/profile.png')}
+                                    style={styles.profilePicture} />  }
+                                    
                             <View style={styles.chatInfo}>
                                 <Text style={styles.name}>{role === 'buyer' ? item.seller.name : item.buyer.name}</Text>
 

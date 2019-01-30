@@ -99,7 +99,7 @@ class DrawerContent extends Component {
                     source={this.state.profilePic ? {uri: this.state.profilePic} : require("../assets/girl.png")}
                 />
               }
-              <Text style={{fontWeight: 'bold', fontSize: 18, marginTop: 10}}>{this.state.name}</Text>
+              <Text style={{fontWeight: 'bold', fontSize: 18, marginTop: 10}}>{this.state.name.toUpperCase()}</Text>
             </TouchableOpacity>
           </View>
           <View style={{flex: 1}}>

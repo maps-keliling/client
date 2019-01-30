@@ -54,18 +54,7 @@ const ChatStackNavigator = createStackNavigator({
 });
 
 const DrawerNavigator = createDrawerNavigator(
-    {   
-        Chat: {
-            screen: ChatStackNavigator,
-            navigationOptions: {
-                drawerIcon: ({ tintColor }) => (
-                    <Image
-                        source={require("../assets/chat.png")}
-                        style={{ width: 50, height: 50, tintColor: tintColor }}
-                    />
-                )
-            }
-        },   
+    {            
       'My Shop': {
           screen: ShopDetail,
           navigationOptions: {
@@ -76,7 +65,18 @@ const DrawerNavigator = createDrawerNavigator(
                   />
               )
           }
-      },      
+      },
+      Chat: {
+        screen: ChatStackNavigator,
+        navigationOptions: {
+            drawerIcon: ({ tintColor }) => (
+                <Image
+                    source={require("../assets/chat.png")}
+                    style={{ width: 50, height: 50, tintColor: tintColor }}
+                />
+            )
+        }
+      },        
       Map: {
           screen: AppStackNavigator,
           navigationOptions: {

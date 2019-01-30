@@ -34,7 +34,8 @@ class App extends Component{
     }).catch(err => console.error('An error occurred', err)); 
   }
 
-  getDirections = async ( mode ) => {
+  getDirections = async ( mode='driving' ) => {
+    console.log('Ini adalah mode :', mode)
     let {lat, long} = this.props.navigation.getParam('coordinate')
     const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.latitude},${this.state.longitude}&destination=${lat},${long}&mode=${mode}&key=${APIKEY_GOOGLE_DIRECTION}`
     try {
@@ -48,6 +49,8 @@ class App extends Component{
         })
         this.setState({
             coords : routes
+        },()=>{
+          console.log('Data berubah!')
         })
     }catch(e){
         console.log('ini adalah error google directions :', e);
@@ -144,19 +147,19 @@ class App extends Component{
   changeTransport = (mode) => {
     switch(mode){
       case 'mobil :' :
-        this.getDirections(this.state.penjual, 'driving')
+        this.getDirections('driving')
         this.setState({
           mode : 'driving'
         })
         break;
       case 'man' : 
-        this.getDirections(this.state.penjual, 'walking')
+        this.getDirections( 'walking')
         this.setState({
           mode : 'walking'
         })
         break;
       case 'sepeda':
-        this.getDirections(this.state.penjual, 'bicycling')
+        this.getDirections('bicycling')
         this.setState({
           mode : 'bicycling'
         })

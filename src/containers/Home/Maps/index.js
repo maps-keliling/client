@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, View, PermissionsAndroid} from 'react-native';
+import {Platform, StyleSheet, View, PermissionsAndroid, AsyncStorage} from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker,Polyline,Callout  } from 'react-native-maps';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 import axios from 'axios';
@@ -23,7 +23,8 @@ class App extends Component{
     latitudeDelta: 0.0010,
     longitudeDelta: 0.0010,
     coords : [],
-    map : React.createRef()
+    map : React.createRef(),
+    role : 'seller'
   }
   
   getDirections = async ( destination ) => {
@@ -136,7 +137,11 @@ class App extends Component{
     })
   }
 
-  componentDidMount(){
+  async componentDidMount(){
+    let role = await AsyncStorage.getItem('role')
+    this.setState({
+      role : role
+    })
     this.cekMapsEnaled()
   }
 
@@ -164,10 +169,10 @@ class App extends Component{
               coordinate={{latitude : user.coordinate.lat, longitude:user.coordinate.long}} 
               title={user.brand} 
               description={this.calculateDistance(user.coordinate)}
-              onCalloutPress={()=> this.props.navigation.navigate('SellerDetail', {
+              onCalloutPress={ this.state.role === 'buyer' ? ()=> this.props.navigation.navigate('SellerDetail', {
                 id : user.id,
                 coordinate : user.coordinate
-              })}>
+              }) : null}>
                 <CustomMarker {...user}/>
             </Marker>
            )

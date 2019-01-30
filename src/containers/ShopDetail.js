@@ -1,11 +1,21 @@
 import React, { Component } from 'react'
-import { AsyncStorage, View, Text, StyleSheet, Button, Image, TextInput, FlatList, Dimensions, ScrollView, Switch, TouchableOpacity, Alert } from 'react-native'
+import { ActivityIndicator, AsyncStorage, View, Text, StyleSheet, Button, Image, TextInput, FlatList, Dimensions, ScrollView, Switch, TouchableOpacity, Alert } from 'react-native'
 import { scale } from '../helpers/scaling';
 import axios from 'axios'
 import firebase from 'react-native-firebase';
 import { connect } from  'react-redux';
 import BurgerMenu from '../components/burgerMenu';
-import Modal from 'react-native-modalbox';
+import Modal from 'react-native-modalbox'
+import ImagePicker from 'react-native-image-picker'
+
+const options = {
+    title: 'Pilih Gambar Makanan',
+    storageOptions: {
+        skipBackup: true,
+        path: 'images',
+    },
+};
+
 class ShopDetail extends Component {
     state = {
         brandName: "",
@@ -16,7 +26,18 @@ class ShopDetail extends Component {
         username : '',
         role : '',
         profilePic : '',
-        token : ''
+        token : '',
+        swipeToClose: true,
+        addModalIsOpen: false,
+        editModalIsOpen: false,
+        inputNewFood: "",
+        inputPrice: "",
+        inputEditFood: "",
+        inputEditPrice: "",
+        currentEditID: "",
+        loading: false,
+        uriImage: {},
+        uploadImageResponse: {}
     }
 
     componentDidMount =  async () => {
@@ -151,32 +172,107 @@ class ShopDetail extends Component {
         })
     }
 
-    addFood = () => {
-        axios({
-            url: `http://35.243.157.0/items`,
-            method: `POST`,
-            headers: {
-                auth: this.state.token
-            },
-            data: {
-                name: this.state.inputNewFood,
-                price: this.state.inputPrice
+    pickImage = () => {
+        ImagePicker.showImagePicker(options, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                console.log('ini adalah balikan response :', response.data)
+
+                this.setState({
+                    uploadImageResponse: response,
+                    uriImage: {
+                        uri: response.uri, 
+                        name : response.fileName, 
+                        type : response.type
+                    }
+                }, () => {
+                    console.log('haiii',this.state.uriImage);
+                })
+
             }
         })
-        .then( response => {
-            // console.log(response.data.itemList);
-            this.setState({
-                inputNewFood: "",
-                inputPrice: "",
-                isOpen: false,
-                listItems: response.data.itemList})
+    }
+
+
+    addFood = () => {
+        this.setState({
+            loading: true
+        }, () => {
+            let formData = new FormData()
+            formData.append('file', this.state.uriImage)
+            formData.append('name', this.state.inputNewFood)
+            formData.append('price', this.state.inputPrice)
+
+            axios.post('http://35.243.157.0/items',formData, {
+                headers : {
+                    "Content-Type": "multipart/form-data",
+                auth : this.state.token
+                }
+            })
+            .then( (response) => {
+                this.setState({
+                    inputNewFood: "",
+                    inputPrice: "",
+                    addModalIsOpen: false,
+                    listItems: response.data.itemList,
+                    loading: false
+                }, () => {
+                    console.log('ini adalah state :', this.state)
+                });
+            })
+            .catch( error => {
+                this.setState({
+                    inputNewFood: "",
+                    inputPrice: "",
+                })
+                console.log( error.response )
+            })
         })
-        .catch( err => {
-            console.log(err.response);
-            // error belum terhandle
+    }
+
+    editFood = () => {
+        this.setState({
+            loading: true
+        }, () => {
+            let formData = new FormData()
+            formData.append('file', this.state.uriImage)
+            formData.append('name', this.state.inputEditFood)
+            formData.append('price', this.state.inputEditPrice)
+
+            axios.put(`http://35.243.157.0/items/${this.state.currentEditID}`, formData, {
+                headers : {
+                    "Content-Type": "multipart/form-data",
+                auth : this.state.token
+                }
+            })
+            .then( (response) => {
+                this.getAllItems()
+                this.setState({
+                    editModalIsOpen: false,
+                    loading: false,
+                    inputEditFood: "",
+                    inputEditPrice: "",
+                }, () => {
+                    console.log('ini adalah state :', this.state)
+                });
+            })
+            .catch( error => {
+                this.setState({
+                    inputEditFood: "",
+                    inputEditPrice: "",
+                    loading: false
+                })
+                console.log( error.response )
+            })
         })
     }
     
+
 
     render() {
         return (
@@ -184,24 +280,8 @@ class ShopDetail extends Component {
                 <BurgerMenu style={styles.burgerMenu} {...this.props}></BurgerMenu>
                 <View style={styles.editBrand}>
                     <View style={styles.inputBrandName}>
-                        <Text>{this.state.brandName}</Text>
-                        {/* <TextInput
-                            placeholder="Nama Toko"
-                            style={styles.inputBrandName}
-                            onChangeText={(text) => this.handleChange('brand', text)}
-                            value={this.state.
-                                brand}
-                            underlineColorAndroid="#F0E9E0"
-                        /> */}
+                        <Text style={styles.titleText}>{this.state.brandName}</Text>
                     </View>
-                    <TouchableOpacity
-                        // onPress={function untuk edit BrandName}
-                    >
-                        <Image
-                            source={require("../assets/edit.png")}
-                            style={styles.editIcon}
-                        />
-                    </TouchableOpacity>
                 </View>
 
                 <ScrollView style={{marginBottom: 50, backgroundColor: 'whitesmoke'}}>
@@ -219,7 +299,7 @@ class ShopDetail extends Component {
                             />
                         </View>
                         <TouchableOpacity
-                            onPress={() => this.setState({isOpen: true, current})}
+                            onPress={() => this.setState({addModalIsOpen: true, uploadImageResponse: {}, uriImage: {}})}
                         >
                             <Image
                                 source={require("../assets/add.png")}
@@ -228,7 +308,8 @@ class ShopDetail extends Component {
                         </TouchableOpacity>
                     </View>
 
-                    <Modal isOpen={this.state.isOpen} onClosed={() => this.setState({isOpen: false})} coverScreen={true} style={styles.modal} position={"center"}>
+                    {/* Modal Add New Item */}
+                    <Modal isOpen={this.state.addModalIsOpen} onClosed={() => this.setState({addModalIsOpen: false})} coverScreen={true} style={styles.modal} position={"center"} >
                         <Text style={styles.titleText}>Tambah menu baru</Text>
                         <View>
                             <TextInput
@@ -242,17 +323,71 @@ class ShopDetail extends Component {
                             <TextInput
                                 autoCapitalize="none"
                                 style={styles.inputForm}
+                                keyboardType="number-pad"
                                 placeholder="Harga"
                                 ref={input => { this.inputPrice = input }}
                                 onChangeText={(text) => this.handleChange('inputPrice', text)}
                                 underlineColorAndroid="#F0E9E0"
                             ></TextInput>
-                            <Button onPress={() => this.addFood()} title="Tambah" color="#ab1919"></Button>
-                        </View>
+                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                <Image 
+                                    source={ this.state.uploadImageResponse.data ? {uri: "data:image/jpeg;base64," + this.state.uploadImageResponse.data} : require('../assets/camera.png')}
+                                    style={{width: 100, height: 100}}
+                                />
+                                <TouchableOpacity onPress={() => this.pickImage()} onLongPress={false}>
+                                    <Text style={{ fontSize: 18 }}>Unggah Foto</Text>
+                                </TouchableOpacity>
+                            </View>
 
+                            {this.state.loading && <ActivityIndicator style={{margin: 10}} size="small" color="#ab1919" />}
+                            <TouchableOpacity onPress={() => this.addFood()} onLongPress={false} style={{borderColor: "#ab1919", borderWidth: 1, borderRadius: 25, paddingVertical: 10, marginVertical: 10 }}>
+                                <Text style={{ fontSize: 18, color: "#ab1919", textAlign: "center"}}>Tambah Baru</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Modal>
+
+
+                    {/* Modal Edit Item */}
+                    <Modal isOpen={this.state.editModalIsOpen} onClosed={() => this.setState({editModalIsOpen: false})} coverScreen={true} style={styles.modal} position={"center"}>
+                        <Text style={styles.titleText}>Ubah Menu</Text>
+                        <View>
+                            <TextInput
+                                autoCapitalize="none"
+                                style={styles.inputForm}
+                                placeholder="Nama menu"
+                                value={this.state.inputEditFood}
+                                ref={input => { this.inputFood = input }}
+                                onChangeText={(text) => this.handleChange('inputEditFood', text)}
+                                underlineColorAndroid="#F0E9E0"
+                            ></TextInput>
+                            <TextInput
+                                autoCapitalize="none"
+                                style={styles.inputForm}
+                                placeholder="Harga"
+                                keyboardType="number-pad"
+                                value={String(this.state.inputEditPrice)}
+                                ref={input => { this.inputPrice = input }}
+                                onChangeText={(text) => this.handleChange('inputEditPrice', text)}
+                                underlineColorAndroid="#F0E9E0"
+                            ></TextInput>
+
+                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                <Image 
+                                    source={ this.state.uploadImageResponse.data ? {uri: "data:image/jpeg;base64," + this.state.uploadImageResponse.data} : require('../assets/camera.png')}
+                                    style={{width: 100, height: 100}}
+                                />
+                                <TouchableOpacity onPress={() => this.pickImage()} onLongPress={false}>
+                                    <Text style={{ fontSize: 18 }}>Unggah Foto</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            {this.state.loading && <ActivityIndicator style={{margin: 10}} size="small" color="#ab1919" />}
+                            <TouchableOpacity onPress={() => this.editFood()} onLongPress={false} style={{borderColor: "#ab1919", borderWidth: 1, borderRadius: 25, paddingVertical: 10 }}>
+                                <Text style={{ fontSize: 18, color: "#ab1919", textAlign: "center"}}>Ubah</Text>
+                            </TouchableOpacity>
+                        </View>
                     </Modal>
                 
-
                     
                     <FlatList
                         horizontal={false}
@@ -263,7 +398,8 @@ class ShopDetail extends Component {
                         renderItem={({item}) => (
                             <View style={styles.eachItem}>
                                 <Image
-                                    source={require("../assets/food.png")}
+                                    source={{uri: item.picture}}
+                                    // source={require("../assets/food.png")}
                                     style={styles.itemImage}
                                 />
                                 <View style={{flex: 1, justifyContent: 'space-between'}}>
@@ -271,7 +407,15 @@ class ShopDetail extends Component {
                                     <Text style={styles.textMenu}>{item.price}</Text>
                                 </View>
                                 <View style={styles.menuOptions}>
-                                    <TouchableOpacity onPress={() => this.setModalVisible(true)}>
+                                    <TouchableOpacity onPress={() => this.setState(
+                                        {
+                                            editModalIsOpen: true, 
+                                            inputEditFood: item.name,
+                                            inputEditPrice: item.price,
+                                            currentEditID: item._id,
+                                            uploadImageResponse: {}, 
+                                            uriImage: {}
+                                    })}>
                                         <Image
                                             source={require("../assets/editBlue.png")}
                                             style={styles.editIcon}
@@ -287,21 +431,18 @@ class ShopDetail extends Component {
                             </View>
                         )}
                     />
-
-
                 </ScrollView>
             </View>
         )
     }
 }
 
-const win = Dimensions.get('window')
 
 const styles = StyleSheet.create({
     titleText: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 25
+        marginVertical: 10
     },
     inputForm: {
         fontSize: 18,
@@ -310,7 +451,7 @@ const styles = StyleSheet.create({
     modal: {
         justifyContent: 'center',
         alignItems: 'center',
-        height: 300,
+        height: 400,
     },
     editBrand: {
         flexDirection: 'row',
@@ -349,8 +490,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     itemImage: {
+        marginTop: 10,
         width: 100,
-        height: 100
+        height: 100,
     },
     eachItem: {
         alignItems: 'center',

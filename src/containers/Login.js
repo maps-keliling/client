@@ -1,5 +1,5 @@
 import React, { Component} from 'react'
-import { StyleSheet, View, Text, Button, ScrollView, Image, TextInput, AsyncStorage } from 'react-native'
+import { StyleSheet, View, Text, Button, ScrollView, Image, TextInput, AsyncStorage, ActivityIndicator } from 'react-native'
 import axios from 'axios'
 import firebase from 'react-native-firebase'
 import { connect } from 'react-redux';
@@ -10,7 +10,8 @@ class Login extends Component {
     state = {
         username: "",
         password: "",
-        error: ""
+        error: "",
+        loading: false
     }
 
     componentDidMount() {
@@ -110,6 +111,7 @@ class Login extends Component {
                     onChangeText={(text) => this.handleChange('password', text)}
                     underlineColorAndroid="#F0E9E0"
                 ></TextInput>
+                {this.state.loading && <ActivityIndicator style={{margin: 10}} size="small" color="#ab1919" />}
                 <Text style={styles.textError}>{this.state.error}</Text>
                 <View style={styles.buttonContainer}>
                     <Button 

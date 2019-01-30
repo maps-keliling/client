@@ -11,7 +11,8 @@ class SellerDetail extends Component {
             name: "",
             price: ""
         }],
-        profilePic: ""
+        profilePic: "",
+        phone : null
     }
     getToken = async () => {
         try {
@@ -36,7 +37,8 @@ class SellerDetail extends Component {
                name : data.name,
                brand : data.shopId.brand,
                itemList : data.shopId.itemList,
-               profilePic: data.profilePic
+               profilePic: data.profilePic,
+               phone : data.phone
            })
         })
         .catch(error => {
@@ -47,7 +49,7 @@ class SellerDetail extends Component {
     }
 
     testCall = () => {
-        Linking.openURL('tel:0816297325').catch((err) => console.error('An error occurred', err));
+        Linking.openURL(`tel:${this.state.phone}`).catch((err) => console.error('An error occurred', err));
     }
 
     chatSeller = async () => {
@@ -121,7 +123,7 @@ class SellerDetail extends Component {
                     <ScrollView>
                         <View style={styles.profileContainer}>
                             <Image
-                                source={require("../assets/profile.png")}
+                                source={this.state.profilePic ? {uri : this.props.profilePic } : require("../assets/profile.png")}
                                 style={styles.imageProfile}
                             ></Image>
                             <Text style={styles.name}>{this.state.name}</Text>
@@ -133,7 +135,7 @@ class SellerDetail extends Component {
                             renderItem={({item}) => (
                                 <View style={styles.itemContainer}>
                                     <Image
-                                        source={require("../assets/food.png")}
+                                        source={{uri : item.picture}}
                                         style={styles.imageFood}
                                     ></Image>
                                     <Text style={styles.itemName}>{item.name}</Text>

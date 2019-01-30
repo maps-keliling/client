@@ -55,15 +55,20 @@ class ChatList extends Component {
             lastChat: "Halo kak, pesanannya sudah sesuai aplikasi ?"
         }],
         myChat: [],
-        role: ''
+        role: '',
+        bool: false,
     }
+
+    // componentWillUnmount = () => {
+    //     firebase.database().ref('chat').off()
+    // }
 
     componentDidMount = async () => {
         const myId = await AsyncStorage.getItem('_id')
         const role = await AsyncStorage.getItem('role')
         // console.log(myId, 'ini id sayay')
-        firebase.database().ref('chat').once('value', (snapshot) => {
-            console.log(snapshot.val(), 'ini dari chat list')
+        firebase.database().ref('chat').on('value', (snapshot) => {
+            // console.log(snapshot.val(), 'ini dari chat list')
             const ArrayOfChatRoom = Object.entries(snapshot.val()).map(item => ({...item[1], key: item[0]}));
             // console.log(ArrayOfChatRoom)
             const filteredChatRoom = ArrayOfChatRoom.filter(each =>  {
@@ -81,17 +86,48 @@ class ChatList extends Component {
                 // console.log(snapshot.val(), 'ini dari message')
                 const chatFiltered = ArrayOfChat.filter(eachChat => {
                     // console.log(eachChat, 'ini eachChat')
+                    // console.log(eachChat.allChat)
+                    const ArrayOfAllChat = Object.entries(eachChat.allChat).map(item => ({...item[1], key: item[0]}));
+                    // console.log(ArrayOfAllChat)
+                    const data = {
+                        key: eachChat.key,
+                        seller: eachChat.seller,
+                        buyer: eachChat.buyer,
+                        allChat: ArrayOfAllChat
+                    }
+                    // console.log(data, 'ini udah diubah')
+                    // const eachChanged = eachChat
                     for (let i = 0; i < keyMessage.length; i++) {
                         if (eachChat.key === keyMessage[i]) {
                             return eachChat
+                            // return data
                         }
                     }
                 })
                 console.log(chatFiltered, 'ini chat filtered')
+                const chatChanged = chatFiltered.map(each => {
+                    const ArrayOfAllChat = Object.entries(each.allChat).map(item => ({...item[1], key: item[0]}));
+                    // console.log(ArrayOfAllChat)
+                    const sortedArrayChat = ArrayOfAllChat.sort(function(a, b) {
+                        // return a.createdAt > b.createdAt;
+                        return new Date(b.createdAt) - new Date(a.createdAt);
+                    });
+                      console.log(sortedArrayChat, 'ini chat list ke sort')
+                    const data = {
+                        key: each.key,
+                        seller: each.seller,
+                        buyer: each.buyer,
+                        allChat: sortedArrayChat
+                    }
+
+                    return data
+                })
+                // console.log(chatChanged, 'ini udah diubah nih')
                 // console.log(chatFiltered.allChat, 'ini all chat nya')
                 this.setState({
-                    myChat: chatFiltered,
-                    role: role
+                    myChat: chatChanged,
+                    role: role,
+                    bool: !this.state.bool
                 })
             })
         })
@@ -106,32 +142,9 @@ class ChatList extends Component {
                 <View style={styles.topMenu}>
                     <Text style={styles.title}>Chat</Text>
                 </View>
-                {/* <FlatList
-                    data={this.state.chatList}
-                    renderItem={({item}) => (
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('ChatRoom')}
-                            style={styles.eachChat}
-                        >   
-                            <Image
-                                source={require('../assets/profile.png')}
-                                style={styles.profilePicture}
-                            />
-                            <View style={styles.chatInfo}>
-                                <Text style={styles.name}>{item.name}</Text>
-                                {item.lastChat.length > 25 ? 
-                                    <Text style={styles.chatDetail}>{item.lastChat.slice(0, 25)}  
-                                        <Text style={{color: '#283D85'}}>       ...more</Text>
-                                    </Text>
-                                    :
-                                    <Text style={styles.chatDetail}>{item.lastChat}</Text>
-                                    }
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                /> */}
                 <FlatList
                     data={this.state.myChat}
+                    extraData={this.state.bool}
                     renderItem={({item}) => (
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('ChatDetail', {
@@ -144,18 +157,15 @@ class ChatList extends Component {
                                 style={styles.profilePicture}
                             />
                             <View style={styles.chatInfo}>
-                                {/* <Text>
-                                    {JSON.stringify(item)}
-                                </Text> */}
                                 <Text style={styles.name}>{role === 'buyer' ? item.seller.name : item.buyer.name}</Text>
-                                {/* <Text style={styles.name}>{item.name}</Text>
-                                {item.lastChat.length > 25 ? 
-                                    <Text style={styles.chatDetail}>{item.lastChat.slice(0, 25)}  
-                                        <Text style={{color: '#283D85'}}>       ...more</Text>
+
+                                {item.allChat[0].message.length > 25 ? 
+                                    <Text style={styles.chatDetail}>{item.allChat[0].message.slice(0, 25)}  
+                                        <Text style={{color: '#283D85'}}>...</Text>
                                     </Text>
                                     :
-                                    <Text style={styles.chatDetail}>{item.lastChat}</Text>
-                                    } */}
+                                    <Text style={styles.chatDetail}>{item.allChat[0].message}</Text>
+                                    }
                             </View>
                         </TouchableOpacity>
                     )}

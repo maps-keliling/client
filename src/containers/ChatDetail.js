@@ -23,10 +23,10 @@ export default class ChatDetail extends Component {
     const chatkey = navigation.getParam('chatKey', '')
     const myId = await AsyncStorage.getItem('_id')
     const myName = await AsyncStorage.getItem('name')
-    console.log(chatkey)
+    // console.log(chatkey)
     firebaseVar = firebase.database().ref('message').child(chatkey)
     firebaseVar.on('value', (snapshot) => {
-      console.log(snapshot.val(), 'ini dari chat detail')
+      // console.log(snapshot.val(), 'ini dari chat detail')
       const ArrayOfChat = Object.entries(snapshot.val().allChat).map(item => {
         const myItem = {
           _id: item[0],
@@ -41,16 +41,23 @@ export default class ChatDetail extends Component {
         // return {...item[1], key: item[0]}
         return myItem
       });
-      console.log(ArrayOfChat)
       const { seller, buyer } = snapshot.val()
+      const filterChat = ArrayOfChat.filter(each => each.text)
+      const sortedChat = filterChat.sort(function(a, b) {
+        // return a.createdAt > b.createdAt;
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+      // console.log(sortedChat, 'ini kena sort')
 
       this.setState({
         seller,
         buyer,
         myId: myId,
         myName: myName,
-        myChat: ArrayOfChat.filter(each => each.text),
+        // myChat: ArrayOfChat.filter(each => each.text),
+        myChat: sortedChat
       })
+      // console.log(ArrayOfChat.filter(each => each.text), 'chat kena filter')
     })
 
     // this.setState({
@@ -112,7 +119,7 @@ export default class ChatDetail extends Component {
     console.log(myId, 'ini id dari chat')
     return (
       <GiftedChat
-        messages={this.state.myChat}
+        messages={myChat}
         onSend={messages => this.onSend(messages)}
         user={{
           _id: myId,

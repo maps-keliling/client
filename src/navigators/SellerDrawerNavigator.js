@@ -54,7 +54,7 @@ const ChatStackNavigator = createStackNavigator({
 });
 
 const DrawerNavigator = createDrawerNavigator(
-    {            
+    {                    
       'My Shop': {
           screen: ShopDetail,
           navigationOptions: {
@@ -76,7 +76,7 @@ const DrawerNavigator = createDrawerNavigator(
                 />
             )
         }
-      },        
+      },              
       Map: {
           screen: AppStackNavigator,
           navigationOptions: {

@@ -435,7 +435,7 @@ class ShopDetail extends Component {
                                     style={styles.itemImage}
                                     />
                                 }
-                                <View style={{flex: 1, justifyContent: 'space-between'}}>
+                                <View style={{flex: 1, justifyContent: 'space-around'}}>
                                     <Text style={styles.textMenu}>{item.name}</Text>
                                     <Text style={styles.textMenu}>{this.formatRupiah(item.price)}</Text>
                                 </View>
@@ -485,6 +485,7 @@ const styles = StyleSheet.create({
         width: '80%',
         textAlign: 'center',
         alignSelf: 'flex-end',
+        fontWeight: '700'
     },
     titleText: {
         fontSize: 24,
@@ -524,7 +525,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row', 
         width: '100%', 
         justifyContent: 'space-between', 
-        backgroundColor: 'salmon', 
+        backgroundColor: '#e8e8e8', 
         borderBottomLeftRadius: 25, 
         borderBottomRightRadius: 25, 
         justifyContent: 'space-around'
@@ -561,6 +562,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         paddingTop: 5,
         paddingBottom: 5,
+        fontWeight: '800'
     }
 })
 

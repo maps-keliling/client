@@ -98,15 +98,15 @@ class ChatList extends Component {
                     <Text style={styles.title}>Chat</Text>
                 </View>
                 
-                {this.state.loading && 
+                {this.state.loading
+                ? 
                     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                         <ActivityIndicator size="large" color="#ab1919" />
                     </View>
-                }
+                :
 
-                {this.state.myChat.length 
+                this.state.myChat.length 
                 ?
-
                 <FlatList
                     data={this.state.myChat}
                     renderItem={({item}) => (
@@ -152,7 +152,9 @@ class ChatList extends Component {
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                     <Text style={{fontSize: 20}}>Tidak ada history chat</Text>
                 </View>
+                
                 }
+
             </View>
         )
     }
@@ -180,14 +182,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderWidth: 1,
         borderColor: 'lightgrey',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingHorizontal: 10,
     },
     profilePicture: {
         flex: 1,
-        height: 75
+        height: 75,
+        width: 75,
+        marginRight: 15,
     },
     chatInfo: {
-        flex: 3
+        flex: 3,
     },
     name: {
         fontSize: 20,

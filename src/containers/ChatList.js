@@ -97,12 +97,15 @@ class ChatList extends Component {
                 <View style={styles.topMenu}>
                     <Text style={styles.title}>Chat</Text>
                 </View>
-
+                
                 {this.state.loading && 
                     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                         <ActivityIndicator size="large" color="#ab1919" />
                     </View>
                 }
+
+                {this.state.myChat.length 
+                ?
 
                 <FlatList
                     data={this.state.myChat}

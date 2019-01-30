@@ -89,17 +89,17 @@ class DrawerContent extends Component {
   render () {
     return (
       <View style={{flex: 1}}>
-          <View style={{alignItems: 'center', padding: 10, borderBottomColor: 'lightgrey', borderBottomWidth: 2}}>
+          <View style={{ justifyContent: 'space-between', height: 200, alignItems: 'center', padding: 10, borderBottomColor: 'lightgrey', borderBottomWidth: 2}}>
             <TouchableOpacity onPress={this.pickImage}>
               {
                 this.state.loading ? 
-                <ActivityIndicator size="large"/> :
+                <ActivityIndicator size="large" style={{width: 128, height:128}}/> :
                 <Image
                     style={{width: 128, height:128, borderRadius: 100}}
                     source={this.state.profilePic ? {uri: this.state.profilePic} : require("../assets/girl.png")}
                 />
               }
-              <Text style={{fontWeight: 'bold', fontSize: 18, marginTop: 10}}>{this.state.name}</Text>
+              <Text style={{fontWeight: 'bold', fontSize: 18, marginTop: 10}}>{this.state.name.toUpperCase()}</Text>
             </TouchableOpacity>
           </View>
           <View style={{flex: 1}}>

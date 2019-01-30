@@ -1,16 +1,17 @@
-import { createSwitchNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation'
-import Login from '../containers/Login'
+import { createSwitchNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
+import Login from '../containers/Login';
 import AuthLoadingScreen from '../components/Loading';
 import Register from '../containers/Register';
 
-import AppDrawerNavigator from './DrawerNavigator'
+import AppDrawerNavigator from './DrawerNavigator';
+import SellerDrawerNavigator from './SellerDrawerNavigator';
 
 const AppSwitchNavigator = createSwitchNavigator({
     AuthLoading: AuthLoadingScreen,
-    // App: AppStack,
     Auth: Login,
     Register: Register,
-    App: { screen: AppDrawerNavigator }
+    App: { screen: AppDrawerNavigator },
+    AppSeller: { screen: SellerDrawerNavigator} ,
 });
 
 const AppContainer = createAppContainer(AppSwitchNavigator);

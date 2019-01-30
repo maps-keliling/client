@@ -130,16 +130,18 @@ class ShopDetail extends Component {
     render() {
         return (
             <View>
+                <BurgerMenu style={styles.burgerMenu} {...this.props}></BurgerMenu>
                 <View style={styles.editBrand}>
                     <View style={styles.inputBrandName}>
-                        <TextInput
+                        <Text>{this.state.brandName}</Text>
+                        {/* <TextInput
                             placeholder="Nama Toko"
                             style={styles.inputBrandName}
                             onChangeText={(text) => this.handleChange('brandName', text)}
                             value={this.state.
                                 brandName}
                             underlineColorAndroid="#F0E9E0"
-                        />
+                        /> */}
                     </View>
                     <TouchableOpacity
                         // onPress={function untuk edit BrandName}
@@ -213,8 +215,10 @@ class ShopDetail extends Component {
                                     source={require("../assets/food.png")}
                                     style={styles.itemImage}
                                 />
-                                <Text style={styles.textMenu}>{item.name}</Text>
-                                <Text style={styles.textMenu}>{item.price}</Text>
+                                <View style={{flex: 1, justifyContent: 'space-between'}}>
+                                    <Text style={styles.textMenu}>{item.name}</Text>
+                                    <Text style={styles.textMenu}>{item.price}</Text>
+                                </View>
                                 <View style={styles.menuOptions}>
                                     <TouchableOpacity onPress={() => this.setModalVisible(true)}>
                                         <Image
@@ -263,6 +267,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 50,
     },
+    burgerMenu: {
+        top: 5,
+        left: 10,
+        zIndex: 2,
+        position : 'absolute',
+    },
     editIcon: {
         width: 50,
         height: 50
@@ -298,6 +308,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 25,
         width: scale(165),
+        height: scale(240),
         margin: 5,
         shadowColor: '#000',
         shadowOffset: { width: 4, height: 4 },

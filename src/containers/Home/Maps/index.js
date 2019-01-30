@@ -20,8 +20,8 @@ class App extends Component{
   state = {
     latitude: -6.265299,
     longitude: 106.782836,
-    latitudeDelta: 0.011,
-    longitudeDelta: 0.011,
+    latitudeDelta: 0.0010,
+    longitudeDelta: 0.0010,
     coords : [],
     map : React.createRef()
   }

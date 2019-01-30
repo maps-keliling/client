@@ -15,8 +15,8 @@ import NavigationMap from './Navigations/index';
 class App extends Component{
   
   state = {
-    latitudeDelta: 0.015,
-    longitudeDelta: 0.0121,
+    latitudeDelta: 0.0010,
+    longitudeDelta: 0.0010,
     coords : [],
     map : React.createRef(),
     mode : 'driving'

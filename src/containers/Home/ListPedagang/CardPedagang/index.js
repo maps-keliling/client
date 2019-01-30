@@ -40,7 +40,7 @@ class Pedagang extends Component {
                         style={styles.photo}/>
                 </View>
                 <View style={styles.DataPedagang}>
-                    <Text style={{alignItems :'center'}}>{this.props.brand}</Text>
+                    <Text style={{alignItems :'center', color:'#ab1919', fontSize :14}}>{this.props.brand}</Text>
                     <Text style={{alignItems :'center', fontWeight: 'bold'}}>
                         {this.state.jarak}
                     </Text>
@@ -74,7 +74,8 @@ const styles = StyleSheet.create({
     photo : {
         flex : 1,
         width : 80,
-        height : 80
+        height : 80,
+        borderRadius : 50
     },
     DataPedagang : {
         paddingLeft : 30,

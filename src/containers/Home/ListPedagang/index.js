@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator,Image} from 'react-native';
 import CardPedagang from './CardPedagang';
 import { connect } from 'react-redux';
 import haversine from 'haversine';
@@ -47,9 +47,22 @@ class ListPedagang extends Component {
                 :
                 (<ScrollView style={styles.container}>
                     {  
+                        this.state.ListPedagang.length !== 0 ? 
                         this.state.ListPedagang.map((pedagang, index) => {
                         return <CardPedagang key={index} {...pedagang} {...this.props}/>
                         })
+                        :
+                        <View style={styles.notFound}>
+                            <View>
+                                <Image 
+                                    source={require('../../../assets/food-not-found.png')}
+                                    style={styles.imageNotFound}/>
+                            </View>
+                            <View style={{ flex : 1, flexWrap : 'wrap'}}>
+                                <Text style={{fontWeight : 'bold'}}>Maaf, Makanan yang anda cari Tidak Tersedia.</Text>
+                            </View>
+                        </View>
+
                     }
                 </ScrollView>)
             }
@@ -68,6 +81,18 @@ const styles = StyleSheet.create({
         paddingTop : 5,
         paddingBottom : 5,
         // backgroundColor : '#e1391bl'  
+    },
+    notFound : {
+        flex : 1,
+        width : '100%',
+        height : '100%',
+        flexDirection: 'row',
+        marginTop : 20
+    },
+    imageNotFound : {
+        width : 100,
+        height : 100,
+        alignSelf : 'center'
     }
 })
 

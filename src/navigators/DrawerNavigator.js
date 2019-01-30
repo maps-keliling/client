@@ -8,7 +8,6 @@ import { View, Text, Image, TouchableHighlight, AsyncStorage } from 'react-nativ
 import Home from '../containers/Home/index';
 import SellerDetail from '../containers/SellerDetail';
 import RoutetoSeller from '../containers/RouteArah/index';
-import SideBar from '../components/Sidebar';
 import ShopDetail from '../containers/ShopDetail';
 
 const AppStackNavigator = createStackNavigator({

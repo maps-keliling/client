@@ -37,7 +37,9 @@ class ShopDetail extends Component {
         currentEditID: "",
         loading: false,
         uriImage: {},
-        uploadImageResponse: {}
+        uploadImageResponse: {},
+        loading: false,
+        urlImageUpdated : ''
     }
 
     componentDidMount =  async () => {
@@ -152,22 +154,31 @@ class ShopDetail extends Component {
     }
 
     getAllItems = () => {
-        axios({
-            url: `http://35.243.157.0/users/${this.state.id}`,
-            method: 'GET',
-            headers: {
-                auth: this.state.token
-            }
-        })
-        .then( response => {
-            console.log(response)
-            this.setState({
-                listItems: response.data.shopId.itemList,
-                brandName: response.data.shopId.brand
+        this.setState({
+            loading: true
+        }, () => {
+            axios({
+                url: `http://35.243.157.0/users/${this.state.id}`,
+                method: 'GET',
+                headers: {
+                    auth: this.state.token
+                }
             })
-        })
-        .catch( err => {
-            console.log(err.response);
+            .then( response => {
+                console.log(response)
+                this.setState({
+                    listItems: response.data.shopId.itemList,
+                    brandName: response.data.shopId.brand,
+                    loading: false
+                })
+            })
+            .catch( err => {
+                this.setState({
+                    loading: false
+                })
+                console.log(err.response);
+            })
+
         })
     }
 
@@ -238,7 +249,7 @@ class ShopDetail extends Component {
             loading: true
         }, () => {
             let formData = new FormData()
-            formData.append('file', this.state.uriImage)
+            formData.append('file', this.state.urlImageUpdated)
             formData.append('name', this.state.inputEditFood)
             formData.append('price', this.state.inputEditPrice)
 
@@ -249,6 +260,7 @@ class ShopDetail extends Component {
                 }
             })
             .then( (response) => {
+                // alert(JSON.stringify(response, 'hahah'))
                 this.getAllItems()
                 this.setState({
                     editModalIsOpen: false,
@@ -260,6 +272,7 @@ class ShopDetail extends Component {
                 });
             })
             .catch( error => {
+                // alert('errrr', JSON.stringify(error))
                 this.setState({
                     inputEditFood: "",
                     inputEditPrice: "",
@@ -344,7 +357,11 @@ class ShopDetail extends Component {
                                 </TouchableOpacity>
                             </View>
 
-                            {this.state.loading && <ActivityIndicator style={{margin: 10}} size="small" color="#ab1919" />}
+                            {this.state.loading && 
+                                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                                    <ActivityIndicator style={{margin: 10}} size="small" color="#ab1919" />
+                                </View>
+                            }
                             <TouchableOpacity onPress={() => this.addFood()} onLongPress={false} style={{borderColor: "#ab1919", borderWidth: 1, borderRadius: 25, paddingVertical: 10, marginVertical: 10 }}>
                                 <Text style={{ fontSize: 18, color: "#ab1919", textAlign: "center"}}>Tambah Baru</Text>
                             </TouchableOpacity>
@@ -377,7 +394,7 @@ class ShopDetail extends Component {
 
                             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                                 <Image 
-                                    source={ this.state.uploadImageResponse.data ? {uri: "data:image/jpeg;base64," + this.state.uploadImageResponse.data} : require('../assets/camera.png')}
+                                    source={{ uri : this.state.urlImageUpdated}}
                                     style={{width: 100, height: 100}}
                                 />
                                 <TouchableOpacity onPress={() => this.pickImage()} onLongPress={false}>
@@ -392,7 +409,12 @@ class ShopDetail extends Component {
                         </View>
                     </Modal>
                 
-                    
+                    {this.state.loading && 
+                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                            <ActivityIndicator style={{margin: 5}} size="large" color="#ab1919" />
+                        </View>
+                    }
+
                     <FlatList
                         horizontal={false}
                         numColumns={2}
@@ -424,9 +446,9 @@ class ShopDetail extends Component {
                                             inputEditFood: item.name,
                                             inputEditPrice: item.price,
                                             currentEditID: item._id,
-                                            uploadImageResponse: {}, 
+                                            urlImageUpdated: item.picture, 
                                             uriImage: {}
-                                    })}>
+                                    }, ()=> console.log('Ini Adalah url updated :', this.state.urlImageUpdated))}>
                                         <Image
                                             source={require("../assets/editBlue.png")}
                                             style={styles.editIcon}
@@ -482,7 +504,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 50,
+        height: 60,
     },
     burgerMenu: {
         top: 5,

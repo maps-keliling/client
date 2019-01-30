@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text,TextInput,TouchableOpacity, StyleSheet} from 'react-native';
+import { View, Text,TextInput,TouchableOpacity, StyleSheet, AsyncStorage} from 'react-native';
 import BurgerMenu from '../../../../components/burgerMenu';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
@@ -11,18 +11,15 @@ class SearchBar extends Component {
         role : 'seller'
     }
     async componentDidMount(){
-        let role = await AsyncStorage.getItem(role)
+        let role = await AsyncStorage.getItem("role")
+        console.log('Wong palembang', role)
         this.setState({
           role : role
-        })
+        }, ()=> console.log(this.state, '==========='))
     }
     render(){
-        let styleTopMenu = styles.topMenu
-        if (this.state.role === 'seller'){
-            styleTopMenu = styles.topMenuSeller
-        }
         return (
-        <View style={styleTopMenu}>
+        <View style={this.state.role === 'buyer' ? styles.topMenu : styles.topMenuSeller }>
             <BurgerMenu {...this.props}/>
             {   this.state.role === 'buyer' ? 
                 <View style={styles.searchBar}>

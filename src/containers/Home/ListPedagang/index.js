@@ -43,7 +43,7 @@ class ListPedagang extends Component {
             {
                 this.props.loading ? 
                 (
-                    <ActivityIndicator style={{alignSelf : 'center'}} size="large" color="#00ff00" />
+                    <ActivityIndicator style={{alignSelf : 'center'}} size="large" color="#ab1919" />
                 )  
                 :
                 (

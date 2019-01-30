@@ -36,7 +36,7 @@ class Pedagang extends Component {
             })} >
                 <View style={styles.ImageWrapper}>
                     <Image 
-                        source={require("../../../../assets/street-vendor.png")}
+                        source={this.props.profilePic ? {uri : this.props.profilePic} : require("../../../../assets/street-vendor.png")}
                         style={styles.photo}/>
                 </View>
                 <View style={styles.DataPedagang}>

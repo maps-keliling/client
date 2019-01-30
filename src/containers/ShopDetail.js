@@ -185,9 +185,9 @@ class ShopDetail extends Component {
                         {/* <TextInput
                             placeholder="Nama Toko"
                             style={styles.inputBrandName}
-                            onChangeText={(text) => this.handleChange('brandName', text)}
+                            onChangeText={(text) => this.handleChange('brand', text)}
                             value={this.state.
-                                brandName}
+                                brand}
                             underlineColorAndroid="#F0E9E0"
                         /> */}
                     </View>

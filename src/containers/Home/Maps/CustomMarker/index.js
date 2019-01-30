@@ -5,10 +5,14 @@ class MarkerCustom extends Component{
     state = {
         show : false
     }
+
+    componentWillMount(){
+        console.log('ini adalah props dari custom marker :', this.props)
+    }
+
     render(){
         return (
             <View style={styles.container}>
-                 <Text style={styles.title}>{this.props.brand}</Text>
                  <Image source={require('../../../../assets/street-vendor.png')} 
                                 style={{ width : 75, height: 75, zIndex:200}}/>
                 <Callout>

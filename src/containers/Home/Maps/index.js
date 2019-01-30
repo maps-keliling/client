@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
+import {Platform, StyleSheet, View, PermissionsAndroid} from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker,Polyline,Callout  } from 'react-native-maps';
-import { PermissionsAndroid,Image, BackHandler, DeviceEventEmitter, Linking } from 'react-native';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 import axios from 'axios';
 const APIKEY_GOOGLE_DIRECTION = 'AIzaSyAwiEbbtLePgCOrTpqCeTYQ8qmt-pxX1bE';
@@ -15,8 +14,6 @@ import CustomMarker from './CustomMarker/index';
 
 
 
-import BurgerMenu from '../../../components/burgerMenu';
-import Icon from 'react-native-vector-icons/FontAwesome';
 //actions 
 import { setCurrentPositionUser } from '../../../actions/home';
 class App extends Component{
@@ -28,16 +25,7 @@ class App extends Component{
     coords : [],
     map : React.createRef()
   }
-  startNavigation = () => {
-    var url = "https://www.google.com/maps/dir/?api=1&origin=75+9th+Ave+New+York,+NY&travelmode=driving&dir_action=navigate&destination=MetLife+Stadium+1+MetLife+Stadium+Dr+East+Rutherford,+NJ+07073";
-    Linking.canOpenURL(url).then(supported => {
-      if (!supported) {
-          console.log('Can\'t handle url: ' + url);
-      } else {
-          //return Linking.openURL(url);
-      }
-  }).catch(err => console.error('An error occurred', err)); 
-  }
+  
   getDirections = async ( destination ) => {
     // let { data } = await axios.get(`https://maps.googleapis.com/maps/api/directions/json?
     //            origin=${this.state}
@@ -177,7 +165,8 @@ class App extends Component{
               title={user.brand} 
               description={this.calculateDistance(user.coordinate)}
               onCalloutPress={()=> this.props.navigation.navigate('SellerDetail', {
-                id : user.id
+                id : user.id,
+                coordinate : user.coordinate
               })}>
                 <CustomMarker {...user}/>
             </Marker>

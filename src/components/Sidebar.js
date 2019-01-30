@@ -22,10 +22,9 @@ class DrawerContent extends Component {
     username: 'User01'
   }
 
-  pickImage = () => {
-    console.log('Masuk Pick Image!')
+  pickImage = async () => {
+    let { token } = await AsyncStorage.getItem('token')
     ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
      
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -42,7 +41,7 @@ class DrawerContent extends Component {
         axios.post('http://35.243.157.0/users/addPhoto',formData, {
           headers : {
             "Content-Type": "multipart/form-data",
-            auth : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjNGU2NGQzMjM0OWRiMTlhMWY2MDk1MiIsIm5hbWUiOiJyYW5nZ2EiLCJ1c2VybmFtZSI6InJhbmdnYTEyMyIsImlhdCI6MTU0ODY0NjM4Nn0.08i7Vy4sfeuWQ7qKV9MP6qF2lXUww6bniYwGSBoYwkc"
+            auth : token
           }
         })
         .then( ({ data }) => {

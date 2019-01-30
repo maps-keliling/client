@@ -19,14 +19,12 @@ class App extends Component{
     longitudeDelta: 0.0121,
     coords : [],
     map : React.createRef(),
-    penjual : {
-        latitude : -6.2656513,
-        longitude : 106.7806633
-    }
+    mode : 'driving'
   }
   
   startNavigation = () => {
-    var url = "https://www.google.com/maps/dir/?api=1&origin=75+9th+Ave+New+York,+NY&travelmode=driving&dir_action=navigate&destination=MetLife+Stadium+1+MetLife+Stadium+Dr+East+Rutherford,+NJ+07073";
+    let {lat, long} = this.props.navigation.getParam('coordinate')
+    var url = `https://www.google.com/maps/dir/?api=1&origin=${this.state.latitude},${this.state.longitude}&travelmode=${this.state.mode}&dir_action=navigate&destination=${lat},${long}`;
     Linking.canOpenURL(url).then(supported => {
       if (!supported) {
           console.log('Can\'t handle url: ' + url);
@@ -147,15 +145,27 @@ class App extends Component{
     switch(mode){
       case 'mobil :' :
         this.getDirections(this.state.penjual, 'driving')
+        this.setState({
+          mode : 'driving'
+        })
         break;
       case 'man' : 
         this.getDirections(this.state.penjual, 'walking')
+        this.setState({
+          mode : 'walking'
+        })
         break;
       case 'sepeda':
         this.getDirections(this.state.penjual, 'bicycling')
+        this.setState({
+          mode : 'bicycling'
+        })
         break;
       default :
       this.getDirections(this.state.penjual, 'driving')
+      this.setState({
+        mode : 'driving'
+      })
     }
   }
 
@@ -179,17 +189,21 @@ class App extends Component{
             longitudeDelta: this.state.longitudeDelta,
           }}>
           <Marker
-            coordinate={{latitude : this.props.currentPosition.latitude, longitude : this.props.currentPosition.longitude}}/>
+            coordinate={{latitude : this.props.currentPosition.latitude, longitude : this.props.currentPosition.longitude}}>
+            <Image source={require('../../assets/current.png')} style={{ width : 80, height : 80}}/>
+          </Marker>
           <Marker
-            coordinate={{latitude : lat, longitude : long}}/>
+            coordinate={{latitude : lat, longitude : long}}>
+            <Image source={require('../../assets/street-vendor.png')} style={{ width : 80, height : 80}}/>
+          </Marker>
 
           <Polyline
             coordinates={this.state.coords}
-            strokeWidth={2}
-            strokeColor="red"/>
+            strokeWidth={5}
+            strokeColor="#275e2c"/>
         </MapView>
         <Transportation changeTransport={this.changeTransport}/>
-        <NavigationMap/>
+        <NavigationMap mode={this.state.mode} latitude={this.props.currentPosition.latitude} longitude={this.props.currentPosition.longitude} destinationLatitude={lat} destinationLongitude={long}/>
       </View>
     );
   }

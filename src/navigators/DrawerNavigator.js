@@ -7,28 +7,48 @@ import React from 'react'
 import { View, Text, Image, TouchableHighlight, AsyncStorage } from 'react-native';
 import Home from '../containers/Home'
 import SellerDetail from '../containers/SellerDetail';
-import SideBar from '../components/Sidebar'
+import RoutetoSeller from '../containers/RouteArah/index';
+import SideBar from '../components/Sidebar';
+import ShopDetail from '../containers/ShopDetail';
+
 const DrawerNavigator = createDrawerNavigator(
     {      
-        MapScreen: createStackNavigator({
-            MapScreen: Home,
-            SellerDetail: SellerDetail,
-            ChatDetail: ChatDetail
-        }),
-        // ChatScreen : createStackNavigator({
-        //     ChatScreen: ChatScreen,
-        //     ChatDetail: ChatDetail
-        // }, {
-        //     initialRouteName: 'ChatScreen'
-        // }),
-        ChatList: createStackNavigator({
-            ChatList: ChatList,
-            ChatDetail: ChatDetail,
-        }),
-        Map : Home,
-        Chats : ChatList,
+        Map: {
+            screen: Home,
+            navigationOptions: {
+                drawerIcon: ({ tintColor }) => (
+                    <Image
+                        source={require("../assets/home.png")}
+                        style={{ width: 50, height: 50, tintColor: tintColor }}
+                    />
+                )
+            }
+        },
+        Chat: {
+            screen: ChatList,
+            navigationOptions: {
+                drawerIcon: ({ tintColor }) => (
+                    <Image
+                        source={require("../assets/chat.png")}
+                        style={{ width: 50, height: 50, tintColor: tintColor }}
+                    />
+                )
+            }
+        },
+        'My Shop': {
+            screen: ShopDetail,
+            navigationOptions: {
+                drawerIcon: ({ tintColor }) => (
+                    <Image
+                        source={require("../assets/street-vendor.png")}
+                        style={{ width: 50, height: 50, tintColor: tintColor }}
+                    />
+                )
+            }
+        },
+        // ChatScreen,
         // SellerDetail : SellerDetail,
-        // ChatList,
+        // RouteToSeller : RoutetoSeller,
     },
     {
         backBehavior: "none",

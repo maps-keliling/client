@@ -55,7 +55,8 @@ class DrawerContent extends Component {
             auth : token
           }
         })
-        .then( ({ data }) => {
+        .then( async ({ data }) => {
+          await AsyncStorage.setItem('profilePic', data.data.profilePic);
           this.setState({
             profilePic: data.data.profilePic,
             loading : false

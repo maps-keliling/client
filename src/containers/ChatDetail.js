@@ -11,7 +11,8 @@ export default class ChatDetail extends Component {
     buyer: {},
     messages: [],
     myId: '',
-    myName: ''
+    myName: '',
+    myProfilePic: ''
   }
 
   componentWillUnmount = () => {
@@ -23,6 +24,8 @@ export default class ChatDetail extends Component {
     const chatkey = navigation.getParam('chatKey', '')
     const myId = await AsyncStorage.getItem('_id')
     const myName = await AsyncStorage.getItem('name')
+    const myProfilePic  = await AsyncStorage.getItem('profilePic')
+
     // console.log(chatkey)
     firebaseVar = firebase.database().ref('message').child(chatkey)
     firebaseVar.on('value', (snapshot) => {
@@ -34,7 +37,8 @@ export default class ChatDetail extends Component {
           createdAt: new Date(item[1].createdAt),
           user: {
             _id: item[1].idUser,
-            name: item[1].name
+            name: item[1].name,
+            avatar: item[1].avatar
           }
         }
         // console.log(myItem)
@@ -55,7 +59,8 @@ export default class ChatDetail extends Component {
         myId: myId,
         myName: myName,
         // myChat: ArrayOfChat.filter(each => each.text),
-        myChat: sortedChat
+        myChat: sortedChat,
+        myProfilePic: myProfilePic
       })
       // console.log(ArrayOfChat.filter(each => each.text), 'chat kena filter')
     })
@@ -86,10 +91,10 @@ export default class ChatDetail extends Component {
     // })
   }
 
-  onSend(messages = []) {
+  onSend = (messages = []) => {
     // const myId = '1234abc'
     // const myName = 'Rangga'
-    const { myId, myName } = this.state
+    const { myId, myName, myProfilePic } = this.state
     const { navigation } = this.props
     const chatkey = navigation.getParam('chatKey', '')
     // console.log({...messages, })
@@ -106,7 +111,8 @@ export default class ChatDetail extends Component {
       idUser: myId,
       message: messages[0].text,
       name: myName,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      avatar: myProfilePic
     })
   }
 

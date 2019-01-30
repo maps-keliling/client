@@ -10,7 +10,8 @@ class SellerDetail extends Component {
         itemList: [{
             name: "",
             price: ""
-        }]
+        }],
+        profilePic: ""
     }
     getToken = async () => {
         try {
@@ -34,7 +35,8 @@ class SellerDetail extends Component {
            this.setState({
                name : data.name,
                brand : data.shopId.brand,
-               itemList : data.shopId.itemList
+               itemList : data.shopId.itemList,
+               profilePic: data.profilePic
            })
         })
         .catch(error => {
@@ -56,12 +58,17 @@ class SellerDetail extends Component {
         let sellerId = this.props.navigation.getParam('id')
         const myId  = await AsyncStorage.getItem('_id')
         const myName  = await AsyncStorage.getItem('name')
+        const myProfilePic  = await AsyncStorage.getItem('profilePic')
+        const sellerProfilePic = this.state.profilePic
         const chatRoomId = `${myId}-${sellerId}`
         // console.log(sellerId, 'ini seller id')
         // console.log(myId, 'ini my id')
         // console.log(newIdChat, 'new id chat')
         // console.log(newIdMessage, 'new id message')
         // console.log('ini room idnya nih', chatRoomId)
+        console.log(myProfilePic, 'ini my profile pic')
+        console.log(sellerProfilePic, 'ini seller profile pic')
+        
         firebase.database().ref('chat').child(chatRoomId).once('value', (snapshot) => {
             // console.log(snapshot.val())
             if (snapshot.val()) {
@@ -78,11 +85,13 @@ class SellerDetail extends Component {
                     return firebase.database().ref('message').child(newIdChat).set({
                         seller: {
                             id: sellerId,
-                            name: this.state.name
+                            name: this.state.name,
+                            profilePic: sellerProfilePic
                         },
                         buyer: {
                             id: myId,
-                            name: myName
+                            name: myName,
+                            profilePic: myProfilePic
                         },
                         allChat: {
                             [newIdMessage]: {

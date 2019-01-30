@@ -2,26 +2,41 @@ import React, { Component } from 'react'
 import { AsyncStorage, View, Text, StyleSheet, Button, Image, TextInput, FlatList, Dimensions, ScrollView, Switch, TouchableOpacity, Alert } from 'react-native'
 import { scale } from '../helpers/scaling';
 import axios from 'axios'
-import Modal from 'react-native-modalbox'
-
+import firebase from 'react-native-firebase';
+import { connect } from  'react-redux';
+import BurgerMenu from '../components/burgerMenu';
+import Modal from 'react-native-modalbox';
 class ShopDetail extends Component {
     state = {
-        token: "",
         brandName: "",
         shopStatus: false,
         listItems: [],
-        swipeToClose: true,
-        // isOpen: false,
-        inputNewFood: "",
-        inputPrice: ""
+        id : '',
+        name : '',
+        username : '',
+        role : '',
+        profilePic : '',
+        token : ''
     }
 
-    componentDidMount = async () => {
-        let token = await AsyncStorage.getItem('token')
+    componentDidMount =  async () => {
+        // this.getAllItems()
+        let {id, name, username, role, profilePic, token } = await this.getDataLocalStorage()
         this.setState({
+            id,
+            name,
+            username,
+            role,
+            profilePic,
             token
-        }, () => {
-            console.log("token: ", this.state.token);
+        }, ()=> {
+            firebase.database().ref(`/seller/${id}`).once('value', snapshot => {
+                if(snapshot.val()){
+                    this.setState({
+                        shopStatus : true
+                    })
+                }
+            })
             this.getAllItems()
         })
     }
@@ -32,14 +47,51 @@ class ShopDetail extends Component {
         })
     }
 
+    getDataLocalStorage = async () => {
+        try {
+            let id =  await AsyncStorage.getItem('id');
+            let role = await AsyncStorage.getItem('role');
+            let name =  await AsyncStorage.getItem('name');
+            let profilePic = await AsyncStorage.getItem('profilePic');
+            let username =  await AsyncStorage.getItem('username');
+            let token =  await AsyncStorage.getItem('token')
+            return {
+                id, role, name, profilePic, username, token
+            }
+        }catch(e){
+            console.log('Error :', e)
+        }
+    }
+
     toggleShopStatus = () => {
         if (this.state.shopStatus) {
             this.setState({
                 shopStatus: false
+            }, ()=> {
+              firebase.database().ref(`/seller/${this.state.id}`).set(null)
             })
         } else {
             this.setState({
                 shopStatus: true
+            }, ()=> {
+                navigator.geolocation.getCurrentPosition(position => {
+                    let { latitude, longitude} = position.coords
+                    firebase.database().ref(`/seller`).child(this.state.id).set({
+                        name : this.state.name,
+                        brand : this.state.brandName,
+                        profilePic : this.state.profilePic,
+                        coordinate : {
+                            lat : latitude,
+                            long : longitude
+                        }
+                    })
+                  }, (error) => {
+                    console.log('ini adaalah error :', error)
+                  }, {
+                    enableHighAccuracy : false,
+                    timeout: 10000,
+                    maximumAge: 10000
+                  })
             })
         }
     }
@@ -81,17 +133,17 @@ class ShopDetail extends Component {
 
     getAllItems = () => {
         axios({
-            url: `http://35.243.157.0/items`,
+            url: `http://35.243.157.0/users/${this.state.id}`,
             method: 'GET',
             headers: {
                 auth: this.state.token
             }
         })
         .then( response => {
-            console.log(response.data.brand);
+            console.log(response)
             this.setState({
-                listItems: response.data.itemList,
-                brandName: response.data.brand
+                listItems: response.data.shopId.itemList,
+                brandName: response.data.shopId.brand
             })
         })
         .catch( err => {
@@ -100,7 +152,6 @@ class ShopDetail extends Component {
     }
 
     addFood = () => {
-        console.log(this.state.inputNewFood, this.state.inputPrice, 'hahaha');
         axios({
             url: `http://35.243.157.0/items`,
             method: `POST`,
@@ -118,14 +169,14 @@ class ShopDetail extends Component {
                 inputNewFood: "",
                 inputPrice: "",
                 isOpen: false,
-                listItems: response.data.itemList
-            })
+                listItems: response.data.itemList})
         })
         .catch( err => {
             console.log(err.response);
             // error belum terhandle
         })
     }
+    
 
     render() {
         return (
@@ -137,9 +188,9 @@ class ShopDetail extends Component {
                         {/* <TextInput
                             placeholder="Nama Toko"
                             style={styles.inputBrandName}
-                            onChangeText={(text) => this.handleChange('brandName', text)}
+                            onChangeText={(text) => this.handleChange('brand', text)}
                             value={this.state.
-                                brandName}
+                                brand}
                             underlineColorAndroid="#F0E9E0"
                         /> */}
                     </View>
@@ -324,4 +375,10 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ShopDetail
+const mapStatetoProps = state => {
+    return {
+        token : state.home.token
+    }
+}
+
+export default connect(mapStatetoProps, null)(ShopDetail);

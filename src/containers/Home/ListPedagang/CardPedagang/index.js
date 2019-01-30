@@ -36,20 +36,13 @@ class Pedagang extends Component {
             })} >
                 <View style={styles.ImageWrapper}>
                     <Image 
-                        source={require("../../../../assets/street-vendor.png")}
+                        source={this.props.profilePic ? {uri : this.props.profilePic} : require("../../../../assets/street-vendor.png")}
                         style={styles.photo}/>
                 </View>
                 <View style={styles.DataPedagang}>
-                    <Text style={{alignItems :'center'}}>{this.props.brand}</Text>
-                    <Text style={{alignItems :'center'}}>
+                    <Text style={{alignItems :'center', color:'#ab1919', fontSize :14}}>{this.props.brand}</Text>
+                    <Text style={{alignItems :'center', fontWeight: 'bold'}}>
                         {this.state.jarak}
-                        {/* {this.convertJarak(this.props.distance)}
-                        {/* <Image 
-                            source={{uri : 'http://icons.iconarchive.com/icons/gpritiranjan/simple-christmas/512/star-icon.png'}}
-                            style={styles.star}/>
-                        <Image 
-                            source={{uri : 'http://icons.iconarchive.com/icons/gpritiranjan/simple-christmas/512/star-icon.png'}}
-                            style={styles.star}/> */} 
                     </Text>
                 </View>
             </TouchableOpacity>
@@ -81,7 +74,8 @@ const styles = StyleSheet.create({
     photo : {
         flex : 1,
         width : 80,
-        height : 80
+        height : 80,
+        borderRadius : 50
     },
     DataPedagang : {
         paddingLeft : 30,

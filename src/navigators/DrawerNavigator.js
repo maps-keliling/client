@@ -5,11 +5,11 @@ import ChatList from '../containers/ChatList'
 import ChatDetail from '../containers/ChatDetail'
 import React from 'react'
 import { View, Text, Image, TouchableHighlight, AsyncStorage } from 'react-native';
-import Home from '../containers/Home'
+import Home from '../containers/Home/index';
 import SellerDetail from '../containers/SellerDetail';
 import RoutetoSeller from '../containers/RouteArah/index';
-import SideBar from '../components/Sidebar';
 import ShopDetail from '../containers/ShopDetail';
+import SideBar from '../components/Sidebar';
 
 const AppStackNavigator = createStackNavigator({
     MapScreen: {

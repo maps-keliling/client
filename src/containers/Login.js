@@ -49,6 +49,7 @@ class Login extends Component {
             const {name, profilePic, token, role, username, _id } = response.data
             const defaultAvatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWROaDgBF1b0LxeIqtVE9C-XbBoGBonouTumjSCtFQB5Hn4BcY'
             await AsyncStorage.setItem('id', _id);
+            await AsyncStorage.setItem('_id', _id);
             await AsyncStorage.setItem('token', token);
             await AsyncStorage.setItem('role', role);
             await AsyncStorage.setItem('name', name);

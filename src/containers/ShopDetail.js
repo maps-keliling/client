@@ -4,6 +4,8 @@ import { scale } from '../helpers/scaling';
 import axios from 'axios'
 import firebase from 'react-native-firebase';
 import { connect } from  'react-redux';
+import BurgerMenu from '../components/burgerMenu';
+import Modal from 'react-native-modalbox';
 class ShopDetail extends Component {
     state = {
         brandName: "",
@@ -18,7 +20,7 @@ class ShopDetail extends Component {
     }
 
     componentDidMount =  async () => {
-        this.getAllItems()
+        // this.getAllItems()
         let {id, name, username, role, profilePic, token } = await this.getDataLocalStorage()
         this.setState({
             id,
@@ -138,9 +140,10 @@ class ShopDetail extends Component {
             }
         })
         .then( response => {
+            console.log(response)
             this.setState({
-                listItems: response.data.itemList,
-                brandName: response.data.brand
+                listItems: response.data.shopId.itemList,
+                brandName: response.data.shopId.brand
             })
         })
         .catch( err => {

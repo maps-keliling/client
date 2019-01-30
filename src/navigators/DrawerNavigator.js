@@ -9,6 +9,7 @@ import Home from '../containers/Home/index';
 import SellerDetail from '../containers/SellerDetail';
 import RoutetoSeller from '../containers/RouteArah/index';
 import ShopDetail from '../containers/ShopDetail';
+import SideBar from '../components/Sidebar';
 
 const AppStackNavigator = createStackNavigator({
     MapScreen: {

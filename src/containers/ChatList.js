@@ -113,7 +113,7 @@ class ChatList extends Component {
                         // return a.createdAt > b.createdAt;
                         return new Date(b.createdAt) - new Date(a.createdAt);
                     });
-                      console.log(sortedArrayChat, 'ini chat list ke sort')
+                    //   console.log(sortedArrayChat, 'ini chat list ke sort')
                     const data = {
                         key: each.key,
                         seller: each.seller,

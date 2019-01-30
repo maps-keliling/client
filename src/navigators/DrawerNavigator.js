@@ -7,7 +7,7 @@ import React from 'react'
 import { View, Text, Image, TouchableHighlight, AsyncStorage } from 'react-native';
 import Home from '../containers/Home/index';
 import SellerDetail from '../containers/SellerDetail';
-import RoutetoSeller from '../containers/RouteArah/index';
+import RouteToSeller from '../containers/RouteArah/index';
 import ShopDetail from '../containers/ShopDetail';
 import SideBar from '../components/Sidebar';
 
@@ -31,6 +31,12 @@ const AppStackNavigator = createStackNavigator({
             title: 'Chat',
         },
     },
+    RouteToSeller: {
+        screen: RouteToSeller,
+        navigationOptions: {
+            header: null,
+        }
+    }
 });
 
 const ChatStackNavigator = createStackNavigator({

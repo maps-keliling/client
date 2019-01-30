@@ -57,14 +57,15 @@ class SellerDetail extends Component {
         const myId  = await AsyncStorage.getItem('_id')
         const myName  = await AsyncStorage.getItem('name')
         const chatRoomId = `${myId}-${sellerId}`
-        console.log(sellerId, 'ini seller id')
-        console.log(myId, 'ini my id')
-        console.log(newIdChat, 'new id chat')
-        console.log(newIdMessage, 'new id message')
+        // console.log(sellerId, 'ini seller id')
+        // console.log(myId, 'ini my id')
+        // console.log(newIdChat, 'new id chat')
+        // console.log(newIdMessage, 'new id message')
+        // console.log('ini room idnya nih', chatRoomId)
         firebase.database().ref('chat').child(chatRoomId).once('value', (snapshot) => {
-            console.log(snapshot.val())
+            // console.log(snapshot.val())
             if (snapshot.val()) {
-                console.log('sudah ada chat history ...')
+                // console.log('sudah ada chat history ...')
                 navigation.navigate('ChatDetail', {
                     chatKey: snapshot.val().messageId,
                     sellerName: this.state.name
@@ -140,9 +141,13 @@ class SellerDetail extends Component {
                             style={styles.menuIcon}
                         ></Image>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>this.props.navigation.navigate('RouteToSeller',{
-                        coordinate : this.props.navigation.getParam('coordinate')
-                    })}>
+                    <TouchableOpacity onPress={()=>{
+                        // console.log('yuk sinihhh')
+                        this.props.navigation.navigate('RouteToSeller',{
+                            coordinate : this.props.navigation.getParam('coordinate')
+                        })
+                    
+                    }}>
                         <Image
                             source={require("../assets/marker.png")}
                             style={styles.menuIcon}

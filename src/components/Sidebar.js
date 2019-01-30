@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import { createDrawerNavigator, createAppContainer, DrawerItems, withNavigation } from 'react-navigation';
-import { ScrollView, Image, Text, View, StyleSheet, Button, TouchableHighlight, AsyncStorage, TouchableOpacity } from 'react-native';
+import { ScrollView,
+         Image,
+        Text,
+        View,
+        StyleSheet,
+        Button,
+        TouchableHighlight,
+        AsyncStorage, 
+        TouchableOpacity,
+        ActivityIndicator } from 'react-native';
 // import { Button } from 'react-native-elements';
 // import styles from './Sidebar.style';
 import PropTypes from 'prop-types';
@@ -19,11 +28,12 @@ class DrawerContent extends Component {
     name: 'User01',
     role: 'User01',
     profilePic: '',
-    username: 'User01'
+    username: 'User01',
+    loading : false
   }
 
   pickImage = async () => {
-    let { token } = await AsyncStorage.getItem('token')
+    let  token  = await AsyncStorage.getItem('token')
     ImagePicker.showImagePicker(options, (response) => {
      
       if (response.didCancel) {
@@ -33,9 +43,10 @@ class DrawerContent extends Component {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        console.log('ini adalah balikan response :', response)
-        console.log('ini adalah type data :', typeof response.data)
-        const source = { uri: response.uri };
+        this.setState({
+          loading : true
+        })
+
         let formData = new FormData()
         formData.append('file',{ uri: response.uri, name : response.fileName, type : response.type})
         axios.post('http://35.243.157.0/users/addPhoto',formData, {
@@ -47,8 +58,7 @@ class DrawerContent extends Component {
         .then( ({ data }) => {
           this.setState({
             profilePic: data.data.profilePic,
-          }, () => {
-            console.log('ini adalah state :', this.state)
+            loading : false
           });
         })
         .catch( error => {
@@ -80,10 +90,14 @@ class DrawerContent extends Component {
       <View style={{flex: 1}}>
           <View style={{alignItems: 'center', padding: 10, borderBottomColor: 'lightgrey', borderBottomWidth: 2}}>
             <TouchableOpacity onPress={this.pickImage}>
-              <Image
-                  style={{width: 128, height:128, borderRadius: 100}}
-                  source={this.state.profilePic ? {uri: this.state.profilePic} : require("../assets/girl.png")}
-              />
+              {
+                this.state.loading ? 
+                <ActivityIndicator size="large"/> :
+                <Image
+                    style={{width: 128, height:128, borderRadius: 100}}
+                    source={this.state.profilePic ? {uri: this.state.profilePic} : require("../assets/girl.png")}
+                />
+              }
               <Text style={{fontWeight: 'bold', fontSize: 18, marginTop: 10}}>{this.state.name}</Text>
             </TouchableOpacity>
           </View>

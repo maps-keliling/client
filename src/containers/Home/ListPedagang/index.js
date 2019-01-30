@@ -8,8 +8,7 @@ class ListPedagang extends Component {
         ListPedagang : []
     }
 
-    sortingNearest = (asal) => {
-        console.log(asal)
+    sortingNearest = () => {
         const currentPosition =  {
            ...this.props.userPosition
         }
@@ -24,18 +23,16 @@ class ListPedagang extends Component {
         let data = sortingData.sort((a, b) => a.distance - b.distance)
         this.setState({
             ListPedagang : data
-        }, ()=>{
-            console.log('ini adalah list pedagang :', this.state )
         })
         
     }
     componentDidMount(){
-        this.sortingNearest('dari did mount!')
+        this.sortingNearest()
     }
 
     componentDidUpdate(prevProps){
         if(prevProps.userPosition.latitude !== this.props.userPosition.latitude || prevProps.userPosition.longitude !== this.props.userPosition.longitude || this.props.allUsers.length !== prevProps.allUsers.length){
-            this.sortingNearest('dari did update !')
+            this.sortingNearest()
         }
     }
 

@@ -41,15 +41,8 @@ class Pedagang extends Component {
                 </View>
                 <View style={styles.DataPedagang}>
                     <Text style={{alignItems :'center'}}>{this.props.brand}</Text>
-                    <Text style={{alignItems :'center'}}>
+                    <Text style={{alignItems :'center', fontWeight: 'bold'}}>
                         {this.state.jarak}
-                        {/* {this.convertJarak(this.props.distance)}
-                        {/* <Image 
-                            source={{uri : 'http://icons.iconarchive.com/icons/gpritiranjan/simple-christmas/512/star-icon.png'}}
-                            style={styles.star}/>
-                        <Image 
-                            source={{uri : 'http://icons.iconarchive.com/icons/gpritiranjan/simple-christmas/512/star-icon.png'}}
-                            style={styles.star}/> */} 
                     </Text>
                 </View>
             </TouchableOpacity>

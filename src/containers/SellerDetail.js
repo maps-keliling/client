@@ -141,9 +141,13 @@ class SellerDetail extends Component {
                             style={styles.menuIcon}
                         ></Image>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>this.props.navigation.navigate('RouteToSeller',{
-                        coordinate : this.props.navigation.getParam('coordinate')
-                    })}>
+                    <TouchableOpacity onPress={()=>{
+                        // console.log('yuk sinihhh')
+                        this.props.navigation.navigate('RouteToSeller',{
+                            coordinate : this.props.navigation.getParam('coordinate')
+                        })
+                    
+                    }}>
                         <Image
                             source={require("../assets/marker.png")}
                             style={styles.menuIcon}

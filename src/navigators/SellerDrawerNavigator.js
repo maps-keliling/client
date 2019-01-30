@@ -1,6 +1,4 @@
 import { createDrawerNavigator, createAppContainer, DrawerItems, withNavigation, createStackNavigator } from 'react-navigation';
-import MapScreen from '../containers/Map';
-import ChatScreen from '../containers/ChatScreen';
 import ChatList from '../containers/ChatList'
 import ChatDetail from '../containers/ChatDetail'
 import React from 'react'
@@ -57,28 +55,39 @@ const ChatStackNavigator = createStackNavigator({
 
 const DrawerNavigator = createDrawerNavigator(
     {      
-        Map: {
-            screen: AppStackNavigator,
-            navigationOptions: {
-                drawerIcon: ({ tintColor }) => (
-                    <Image
-                        source={require("../assets/location.png")}
-                        style={{ width: 50, height: 50, tintColor: tintColor }}
-                    />
-                )
-            }
-        },
-        Chat: {
-            screen: ChatStackNavigator,
-            navigationOptions: {
-                drawerIcon: ({ tintColor }) => (
-                    <Image
-                        source={require("../assets/chat.png")}
-                        style={{ width: 50, height: 50, tintColor: tintColor }}
-                    />
-                )
-            }
-        },
+      'My Shop': {
+          screen: ShopDetail,
+          navigationOptions: {
+              drawerIcon: ({ tintColor }) => (
+                  <Image
+                      source={require("../assets/street-vendor.png")}
+                      style={{ width: 50, height: 50, tintColor: tintColor }}
+                  />
+              )
+          }
+      },
+      Chat: {
+          screen: ChatStackNavigator,
+          navigationOptions: {
+              drawerIcon: ({ tintColor }) => (
+                  <Image
+                      source={require("../assets/chat.png")}
+                      style={{ width: 50, height: 50, tintColor: tintColor }}
+                  />
+              )
+          }
+      },
+      Map: {
+          screen: AppStackNavigator,
+          navigationOptions: {
+              drawerIcon: ({ tintColor }) => (
+                  <Image
+                      source={require("../assets/home.png")}
+                      style={{ width: 50, height: 50, tintColor: tintColor }}
+                  />
+              )
+          }
+      },
     },
     {
         backBehavior: "none",

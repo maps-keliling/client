@@ -42,11 +42,6 @@ class Login extends Component {
             this.inputUsername.clear()
             this.inputPassword.clear()
 
-            console.log('login======')
-            console.log(response.data)
-
-            // let token = response.data.token
-            // let role = response.data.role
             const {name, profilePic, token, role, username, _id } = response.data
             const defaultAvatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWROaDgBF1b0LxeIqtVE9C-XbBoGBonouTumjSCtFQB5Hn4BcY'
             await AsyncStorage.setItem('id', _id);
@@ -56,14 +51,11 @@ class Login extends Component {
             await AsyncStorage.setItem('name', name);
             await AsyncStorage.setItem('profilePic', profilePic || defaultAvatar);
             await AsyncStorage.setItem('username', username);
-            this.props.SetTokenToRedux(token)
-            if (role === "seller") {
-                // this.props.navigation.navigate('SellerHome')
-                console.log('Masuk ke sini ni! ke seller!')
-                this.props.navigation.navigate('App')
+            await AsyncStorage.setItem('_id', _id);
+
+            if (role === "seller") {    
+                this.props.navigation.navigate('AppSeller')
             } else if (role === "buyer") {
-                console.log('Masuk ke buyer!')
-                // this.props.navigation.navigate("BuyerHome")
                 this.props.navigation.navigate('App')
             }else{
                 console.log('Masuk ke Else!')

@@ -20,10 +20,11 @@ class AuthLoading extends React.Component {
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
     if (role === "seller") {    
-      // this.props.navigation.navigate(role ? 'App' : 'Auth');
       this.props.navigation.navigate('AppSeller')
+    } else if(role === 'buyer') {
+      this.props.navigation.navigate('App')
     } else {
-        this.props.navigation.navigate('App')
+      this.props.navigation.navigate('Auth')
     }
   };
 
@@ -31,7 +32,7 @@ class AuthLoading extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ActivityIndicator />
+        <ActivityIndicator style={{margin: 10}} size="large" color="#ab1919" />
         <StatusBar barStyle="default" />
       </View>
     );

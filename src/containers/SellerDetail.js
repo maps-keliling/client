@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, FlatList, ScrollView, TouchableOpacity, Linking, AsyncStorage } from 'react-native'
+import { View, Text, Image, FlatList, ScrollView, TouchableOpacity, Linking, AsyncStorage, ActivityIndicator } from 'react-native'
 import axios from 'axios';
 import firebase from 'react-native-firebase'
 
@@ -7,10 +7,7 @@ class SellerDetail extends Component {
     state = {
         name: "",
         brand: "",
-        itemList: [{
-            name: "",
-            price: ""
-        }],
+        itemList: [],
         profilePic: "",
         phone : null
     }
@@ -116,33 +113,56 @@ class SellerDetail extends Component {
 
     }
 
+    formatRupiah = (number) => {
+        var splitNum;
+        number = Math.abs(number);
+        number = number.toFixed(0);
+        splitNum = number.split('.');
+        splitNum[0] = splitNum[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return 'Rp. ' + splitNum.join(".");
+    }
+
     render() {
         return (
             <View style={styles.container}>
-                <View>
+                <View style={{marginBottom: 70, flex: 1}}>
                     <ScrollView>
                         <View style={styles.profileContainer}>
                             <Image
-                                source={this.state.profilePic ? {uri : this.props.profilePic } : require("../assets/profile.png")}
+                                source={this.state.profilePic ? {uri : this.state.profilePic } : require("../assets/profile.png")}
                                 style={styles.imageProfile}
                             ></Image>
-                            <Text style={styles.name}>{this.state.name}</Text>
                             <Text style={styles.brand}>{this.state.brand}</Text>
+                            <Text style={styles.name}>{this.state.name}</Text>
                         </View>
-                        <FlatList
-                            style={styles.flatList}
-                            data={this.state.itemList}
-                            renderItem={({item}) => (
-                                <View style={styles.itemContainer}>
-                                    <Image
-                                        source={{uri : item.picture}}
-                                        style={styles.imageFood}
-                                    ></Image>
-                                    <Text style={styles.itemName}>{item.name}</Text>
-                                    <Text style={styles.itemPrice}>{item.price}</Text>
-                                </View>
-                            )}
-                        />
+                        {this.state.itemList.length
+                        ?
+                            <FlatList
+                                style={styles.flatList}
+                                data={this.state.itemList}
+                                renderItem={({item}) => (
+                                    <View style={styles.itemContainer}>
+                                        {item.picture 
+                                        ? <Image
+                                            source={{uri: item.picture}}
+                                            style={styles.imageFood}
+                                            /> 
+                                        : <Image
+                                            source={require("../assets/food.png")}
+                                            style={styles.imageFood}
+                                            />
+                                        }
+                                        <View style={{flex: 1, flexWrap: 'wrap', justifyContent: 'center'}}>
+                                            <Text style={styles.itemName}>{item.name}</Text>
+                                            <Text style={styles.itemPrice}>{this.formatRupiah(item.price)}</Text>
+                                        </View>
+                                    </View>
+                                )}
+                            />
+                        : <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
+                            <ActivityIndicator style={{margin: 10}} size="large" color="#ab1919" />
+                        </View>
+                        }
                     </ScrollView>
                 </View>
                 <View style={styles.bottomMenu}>
@@ -153,7 +173,6 @@ class SellerDetail extends Component {
                         ></Image>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={()=>{
-                        // console.log('yuk sinihhh')
                         this.props.navigation.navigate('RouteToSeller',{
                             coordinate : this.props.navigation.getParam('coordinate')
                         })
@@ -200,43 +219,54 @@ const styles = {
         height: 70
     },
     profileContainer: {
-        alignItems: 'center', 
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: "white",
         marginVertical: 10,
     },
     imageProfile: {
         width: 200,
-        height: 200
+        height: 200,
+        borderRadius: 100
+    },
+    flatList: {
+        backgroundColor: "white",
+        // marginVertical: 15,
     },
     itemContainer: {
         flex: 1,
         flexDirection: 'row',
-        marginVertical: 10,
-        marginHorizontal: 10
-    },
-    flatList: {
-        backgroundColor: "white",
-        marginVertical: 15,
+        paddingVertical: 10,
+        paddingHorizontal: 5,
+        marginVertical: 5,
+        marginHorizontal: 10,
+        borderWidth: 2,
+        borderRadius: 10,
+        borderColor: 'lightgrey'
     },
     imageFood: {
-        flex: 2,
-        height: 100,
+        height: 120,
+        width: 170,
+        borderRadius: 10,
     },
     itemName: {
-        flex: 3,
-        fontSize: 18,
+        fontSize: 22,
         marginHorizontal: 10,
+        fontWeight: 'bolder',        
     },
     itemPrice: {
-        flex: 1,
         marginHorizontal: 10,
         fontSize: 18,
     },
     name: {
-        fontSize: 40,
+        fontSize: 24
     },
     brand: {
-        fontSize: 30
+        fontSize: 35,
+        alignItems: 'center',
+        textAlign: 'center',
+        color: '#ab1919'
     }
 }
 

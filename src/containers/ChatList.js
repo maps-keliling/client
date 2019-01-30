@@ -59,9 +59,10 @@ class ChatList extends Component {
         bool: false,
     }
 
-    // componentWillUnmount = () => {
-    //     firebase.database().ref('chat').off()
-    // }
+    componentWillUnmount = () => {
+        firebase.database().ref('chat').off()
+        firebase.database().ref('message').off()
+    }
 
     componentDidMount = async () => {
         const myId = await AsyncStorage.getItem('_id')
@@ -81,7 +82,7 @@ class ChatList extends Component {
             // console.log(filteredChatRoom, 'ini filtered')
             // console.log(keyMessage, 'ini key only')
 
-            firebase.database().ref('message').once('value', (snapshot) => {
+            firebase.database().ref('message').on('value', (snapshot) => {
                 const ArrayOfChat = Object.entries(snapshot.val()).map(item => ({...item[1], key: item[0]}));
                 // console.log(snapshot.val(), 'ini dari message')
                 const chatFiltered = ArrayOfChat.filter(eachChat => {
@@ -144,7 +145,7 @@ class ChatList extends Component {
                 </View>
                 <FlatList
                     data={this.state.myChat}
-                    extraData={this.state.bool}
+                    // extraData={this.state.bool}
                     renderItem={({item}) => (
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('ChatDetail', {

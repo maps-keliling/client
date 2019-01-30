@@ -11,10 +11,48 @@ import RoutetoSeller from '../containers/RouteArah/index';
 import SideBar from '../components/Sidebar';
 import ShopDetail from '../containers/ShopDetail';
 
+const AppStackNavigator = createStackNavigator({
+    MapScreen: {
+        screen: Home,
+        navigationOptions: {
+            title: 'Home',
+            header: null,
+        },
+    },
+    SellerDetail: {
+        screen: SellerDetail,
+        navigationOptions: {
+            title: 'Info Penjual',
+        },
+    },
+    ChatDetail: {
+        screen: ChatDetail,
+        navigationOptions: {
+            title: 'Chat',
+        },
+    },
+});
+
+const ChatStackNavigator = createStackNavigator({
+    ChatList: {
+        screen: ChatList,
+        navigationOptions: {
+            title: 'Home',
+            header: null,
+        },
+    },
+    ChatDetail: {
+        screen: ChatDetail,
+        navigationOptions: {
+            title: 'Chat',
+        },
+    },
+});
+
 const DrawerNavigator = createDrawerNavigator(
     {      
         Map: {
-            screen: Home,
+            screen: AppStackNavigator,
             navigationOptions: {
                 drawerIcon: ({ tintColor }) => (
                     <Image
@@ -25,7 +63,7 @@ const DrawerNavigator = createDrawerNavigator(
             }
         },
         Chat: {
-            screen: ChatList,
+            screen: ChatStackNavigator,
             navigationOptions: {
                 drawerIcon: ({ tintColor }) => (
                     <Image
@@ -46,9 +84,6 @@ const DrawerNavigator = createDrawerNavigator(
                 )
             }
         },
-        // ChatScreen,
-        // SellerDetail : SellerDetail,
-        // RouteToSeller : RoutetoSeller,
     },
     {
         backBehavior: "none",
